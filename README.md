@@ -5,7 +5,7 @@ Added tip parameter, which is used to prompt errors when parameter verification 
 
 # Install 
 ```
-npm i @c_kai/parameter --save
+npm i @ckpack/parameter --save
 ```
 
 # Usage
