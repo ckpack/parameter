@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/ckpack/parameter/compare/v2.0.1...v2.1.0) (2021-09-24)
+
+
+### Features
+
+* Refactor with typescript ([860f626](https://github.com/ckpack/parameter/commit/860f6269dacfb935c3c3f285b6400600f8b3dbb3))
+
 ### [0.0.5](https://github.com/chenkai0520/js-utils/compare/v0.0.4...v0.0.5) (2021-09-15)
 
 
