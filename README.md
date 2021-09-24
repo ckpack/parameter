@@ -132,5 +132,3 @@ let errors = parameter.validate(rule, data, {
 });
 
 ```
-
-

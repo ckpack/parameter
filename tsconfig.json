@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "baseUrl": "src",
+        "target": "esnext",
+        "module": "esnext",
+        "declaration": true,
+        "outDir": "es",
+        "strict": true,
+        "moduleResolution": "node",
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "es", "cjs"]
+}

@@ -1,20 +1,58 @@
 {
   "name": "@ckpack/parameter",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "用于参数验证",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha"
-  },
+  "main": "es/index.js",
+  "types": "es/index.d.ts",
   "keywords": [
     "parameter",
     "verify"
   ],
-  "author": "chenkai",
-  "license": "ISC",
-  "dependencies": {},
   "repository": "https://github.com/ckpack/parameter",
+  "scripts": {
+    "test": "jest",
+    "build": "npm run build:es && npm run build:cjs && npm run build:docs",
+    "build:es": "tsc",
+    "prebuild:es": "rm -rf ./es/*",
+    "build:cjs": "tsc -p tsconfig-cjs.json",
+    "prebuild:cjs": "rm -rf ./cjs/*",
+    "build:docs": "typedoc ./src/index.ts",
+    "prebuild:docs": "rm -rf ./docs/*",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "release": "standard-version",
+    "prepare": "husky install"
+  },
+  "files": [
+    "es",
+    "cjs"
+  ],
+  "author": "chenkai",
+  "license": "MIT",
   "devDependencies": {
-    "mocha": "^7.0.0"
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@types/jest": "^27.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "husky": "^7.0.2",
+    "jest": "^27.2.0",
+    "ts-jest": "^27.0.5",
+    "tslib": "^2.3.0",
+    "typedoc": "^0.22.3",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "lint-staged": "^11.1.2",
+    "standard-version": "^9.3.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    ]
   }
 }
