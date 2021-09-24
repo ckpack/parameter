@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/ckpack/parameter/compare/v2.0.1...v2.2.0) (2021-09-24)
+
+
+### Features
+
+* add change log ([86b62cd](https://github.com/ckpack/parameter/commit/86b62cd06f86e0ec3772a748ea1260bfd4d8ef92))
+* Refactor with typescript ([860f626](https://github.com/ckpack/parameter/commit/860f6269dacfb935c3c3f285b6400600f8b3dbb3))
+
 ## [2.1.0](https://github.com/ckpack/parameter/compare/v2.0.1...v2.1.0) (2021-09-24)
 
 
