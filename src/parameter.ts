@@ -1,12 +1,19 @@
+import type { checkFunction } from './checkers';
 import { convertValue, checkProperty, formatRule, toRawType } from './utils';
 import { DEF_CHECKERS, Error, Rule } from './checkers';
 
-interface ParameterOptions {
-  isConvert?:Boolean,
-  isStrict?:Boolean,
+export type {
+  checkFunction,
+  Error,
+  Rule
+};
+export interface ParameterOptions {
+  isCoerceTypes?:Boolean,
+  isRemoveAdditional?:Boolean,
+  isUseDefault?:Boolean,
 };
 
-const DEF_CONVERT: {
+export const DEF_CONVERT: {
   [type:string]: string
 } = {
   number: 'number',
@@ -18,13 +25,15 @@ const DEF_CONVERT: {
   custom: 'string'
 };
 
-class Parameter {
-  isConvert: Boolean;
-  isStrict: Boolean;
+export class Parameter {
+  isCoerceTypes: Boolean;
+  isRemoveAdditional: Boolean;
+  isUseDefault: Boolean;
   constructor (options: ParameterOptions = {}) {
-    const { isConvert = false, isStrict = false } = options;
-    this.isConvert = isConvert;
-    this.isStrict = isStrict;
+    const { isCoerceTypes = false, isRemoveAdditional = false, isUseDefault = true } = options;
+    this.isCoerceTypes = isCoerceTypes;
+    this.isRemoveAdditional = isRemoveAdditional;
+    this.isUseDefault = isUseDefault;
   }
 
   validate (rules:{
@@ -36,9 +45,9 @@ class Parameter {
       throw new TypeError('rules or params need object type');
     }
 
-    // 严格模式下如果数据中不存在rules中会被过滤掉
-    const { isStrict = this.isStrict, isConvert = this.isConvert } = options;
-    if (isStrict) {
+    // isRemoveAdditional = true 如果数据中不存在rules中会被过滤掉
+    const { isRemoveAdditional = this.isRemoveAdditional, isCoerceTypes = this.isCoerceTypes, isUseDefault = this.isUseDefault } = options;
+    if (isRemoveAdditional) {
       Object.keys(params).forEach((key) => {
         if (!checkProperty(rules, key)) {
           delete params[key];
@@ -54,61 +63,54 @@ class Parameter {
       const rule:Rule = formatRule(rules[key]);
 
       // 检查是否可选，设置默认值
-      const isExist = value !== null && value !== undefined;
-      if (!isExist) {
-        if (rule.required !== false) {
+      const isEmpty = [null, undefined, ''].includes(value);
+
+      if (isEmpty) {
+        if (rule.isRequired !== false) {
           errors.push({
             message: 'required',
             field: key,
             code: 'missing_field'
           });
         }
-        // support default value
-        if (checkProperty(rule, 'default')) {
+        if (isUseDefault && checkProperty(rule, 'default')) {
           params[key] = rule.default;
         }
         return;
       }
 
-      // isConvert
-      if (isConvert) {
-        params[key] = !Array.isArray(value)
-          ? convertValue(params[key], rule.convertType || DEF_CONVERT[rule.type || 'string'])
-          : value.map((val) => convertValue(val, rule.itemType));
+      // 是否强制类型转换
+      if (isCoerceTypes) {
+        if (!Array.isArray(value)) {
+          if (rule.convertType || rule.type) {
+            params[key] = convertValue(params[key], rule.convertType || (rule.type && DEF_CONVERT[rule.type]));
+          }
+        } else {
+          if (rule.itemType) {
+            params[key] = value.map((val) => convertValue(val, rule.itemType));
+          }
+        }
       }
 
       // 检查参数是否合法
-      const checker = rule.checker || DEF_CHECKERS[rule.type || 'string'];
+      const checker = rule.checker || (rule.type && DEF_CHECKERS[rule.type]);
       if (!checker) {
         throw new TypeError(`rule type must be one of  ${Object.keys(DEF_CHECKERS).join(', ')}, but the following type was passed: ${rule.type}`);
       }
-      const msg = checker.call(this, rule, params[key], params);
-      if (msg) {
+      const message = checker.call(this, rule, params[key], params);
+      if (message) {
         errors.push({
-          message: rule.msg || msg,
+          message: rule.message || message,
           code: 'invalid',
           field: key
         });
       }
     });
 
-    if (errors.length) {
-      return errors;
-    }
-    return null;
+    return errors.length ? errors : null;
   }
 
-  addRule (type:string, checkRule:any) {
+  addRule (type:string, checkRule:checkFunction) {
     DEF_CHECKERS[type] = checkRule;
   }
 }
-
-export {
-  Parameter
-};
-
-export type {
-  Error,
-  Rule,
-  ParameterOptions
-};

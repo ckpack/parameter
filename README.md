@@ -52,7 +52,7 @@ Default `convertType` is `number`.
 If type is `string`, there has four addition rules:
 
 - `allowEmpty`(alias to `empty`) - allow empty string, default to false. If `rule.required` set to false, `allowEmpty` will be set to `true` by default.
-- `format` - A `RegExp` to check string's format.
+- `regexp` - A `RegExp` to check string's regexp.
 - `max` - The maximum length of the string.
 - `min` - The minimum length of the string.
 - `trim` - Trim the string before check, default is `false`.
@@ -113,7 +113,7 @@ var rule = {
   age: {
       type: 'int',
       min: 0,
-      msg: '需要是一个大于0的整数',
+      message: '需要是一个大于0的整数',
       convert: false,
   },
   gender: ['male', 'female', 'unknown'],

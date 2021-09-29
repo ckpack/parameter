@@ -1,1 +1,1 @@
-export * as Parameter from './parameter';
+export * from './parameter';
