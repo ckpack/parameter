@@ -1,0 +1,109 @@
+<!DOCTYPE html><html class="default no-js"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>@ckpack/parameter</title><meta name="description" content="Documentation for @ckpack/parameter"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">@ckpack/parameter</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>@ckpack/parameter</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#parameter" id="parameter" style="color: inherit; text-decoration: none;">
+  <h1>Parameter</h1>
+</a>
+<p>Base on <a href="https://www.npmjs.com/package/parameter">parameter</a>；</p>
+<p>Added tip parameter, which is used to prompt errors when parameter verification fails.</p>
+
+<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+  <h1>Install</h1>
+</a>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">i</span><span class="hl-1"> @</span><span class="hl-0">ckpack</span><span class="hl-1">/</span><span class="hl-0">parameter</span><span class="hl-1"> --</span><span class="hl-0">save</span>
+</code></pre>
+
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h1>Usage</h1>
+</a>
+<p><code>Parameter</code> Class</p>
+<ul>
+<li><code>constructor([options])</code> - new Class <code>Parameter</code> instance<ul>
+<li><code>options.convert</code> - 数据的类型进行转换,如 string:<code>&#39;5&#39;</code> =&gt; number <code>5</code>, default to <code>false</code></li>
+<li><code>strict</code> - 如果为<code>true</code> 如果数据中的key在对应rule中不存在会被删除，default to <code>false</code></li>
+</ul>
+</li>
+<li><code>validate(rule, value, opts)</code> - 校验 <code>value</code> 是否符合 <code>rule</code>. 如果不符合会返回错误数组</li>
+<li><code>addRule(type, check)</code> - 增加自定义规则<ul>
+<li><code>type</code> - 规则类型</li>
+<li><code>check(rule, value, obj)</code> - 回调函数，返回的信息表示错误</li>
+</ul>
+</li>
+</ul>
+
+<a href="#rule" id="rule" style="color: inherit; text-decoration: none;">
+  <h1>Rule</h1>
+</a>
+
+<a href="#common-rule" id="common-rule" style="color: inherit; text-decoration: none;">
+  <h4>common rule</h4>
+</a>
+<ul>
+<li><code>required</code> - if <code>required</code> is set to false, this property can be null or undefined. default to <code>true</code>.</li>
+<li><code>type</code> - The type of property, every type has it&#39;s own rule for the validate.</li>
+<li><code>convertType</code> - Make parameter convert the input param to the specific type, support <code>int</code>, <code>number</code>, <code>string</code> and <code>boolean</code>, also support a function to customize your own convert method.</li>
+<li><code>default</code> - The default value of property, once the property is allowed non-required and missed, parameter will use this as the default value. <strong>This may change the original input params</strong>.</li>
+</ul>
+
+<a href="#int" id="int" style="color: inherit; text-decoration: none;">
+  <h4>int</h4>
+</a>
+<p>If type is <code>int</code>, there has tow addition rules:</p>
+<ul>
+<li><code>max</code> - The maximum of the value, <code>value</code> must &lt;= <code>max</code>.</li>
+<li><code>min</code> - The minimum of the value, <code>value</code> must &gt;= <code>min</code>.</li>
+</ul>
+<p>Default <code>convertType</code> is <code>int</code>.</p>
+
+<a href="#number" id="number" style="color: inherit; text-decoration: none;">
+  <h4>number</h4>
+</a>
+<p>If type is <code>number</code>, there has tow addition rules:</p>
+<ul>
+<li><code>max</code> - The maximum of the value, <code>value</code> must &lt;= <code>max</code>.</li>
+<li><code>min</code> - The minimum of the value, <code>value</code> must &gt;= <code>min</code>.</li>
+</ul>
+<p>Default <code>convertType</code> is <code>number</code>.</p>
+
+<a href="#string" id="string" style="color: inherit; text-decoration: none;">
+  <h4>string</h4>
+</a>
+<p>If type is <code>string</code>, there has four addition rules:</p>
+<ul>
+<li><code>allowEmpty</code>(alias to <code>empty</code>) - allow empty string, default to false. If <code>rule.required</code> set to false, <code>allowEmpty</code> will be set to <code>true</code> by default.</li>
+<li><code>regexp</code> - A <code>RegExp</code> to check string&#39;s regexp.</li>
+<li><code>max</code> - The maximum length of the string.</li>
+<li><code>min</code> - The minimum length of the string.</li>
+<li><code>trim</code> - Trim the string before check, default is <code>false</code>.</li>
+</ul>
+<p>Default <code>convertType</code> is <code>string</code></p>
+
+<a href="#boolean" id="boolean" style="color: inherit; text-decoration: none;">
+  <h4>boolean</h4>
+</a>
+<p>Match <code>boolean</code> type value.</p>
+<p>Default <code>convertType</code> is <code>boolean</code>.</p>
+
+<a href="#enum" id="enum" style="color: inherit; text-decoration: none;">
+  <h4>enum</h4>
+</a>
+<p>If type is <code>enum</code>, it requires an addition rule:</p>
+<ul>
+<li><code>values</code> - An array of data, <code>value</code> must be one on them. <em><strong>this rule is required.</strong></em></li>
+</ul>
+
+<a href="#array" id="array" style="color: inherit; text-decoration: none;">
+  <h4>array</h4>
+</a>
+<p>If type is <code>array</code>, there has four addition rule:</p>
+<ul>
+<li><code>itemType</code> - The type of every item in this array.</li>
+<li><code>rule</code> - An object that validate the items of the array. Only work with <code>itemType</code>.</li>
+<li><code>max</code> - The maximun length of the array.</li>
+<li><code>min</code> - The minimun lenght of the array.</li>
+</ul>
+
+<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+  <h1>example</h1>
+</a>
+<pre><code class="language-js"><br/><span class="hl-2">let</span><span class="hl-1"> </span><span class="hl-0">parameter</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-3">Parameter</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-0">convert:</span><span class="hl-1"> </span><span class="hl-2">true</span><span class="hl-1">,</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-0">parameter</span><span class="hl-1">.</span><span class="hl-3">addRule</span><span class="hl-1">(</span><span class="hl-4">&#39;even&#39;</span><span class="hl-1">, (</span><span class="hl-0">rule</span><span class="hl-1">, </span><span class="hl-0">value</span><span class="hl-1">)</span><span class="hl-2">=&gt;</span><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-5">if</span><span class="hl-1">(</span><span class="hl-0">value</span><span class="hl-1"> % </span><span class="hl-6">2</span><span class="hl-1"> !== </span><span class="hl-6">0</span><span class="hl-1">){</span><br/><span class="hl-1">    </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-4">&#39;不是一个偶数&#39;</span><span class="hl-1">;</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">  </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-2">null</span><span class="hl-1">;</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">data</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-0">email:</span><span class="hl-1"> </span><span class="hl-4">&#39;chenkai@mapplat.com&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">name:</span><span class="hl-1"> </span><span class="hl-4">&#39;xiao hong&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">age:</span><span class="hl-1"> </span><span class="hl-6">24</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">gender:</span><span class="hl-1"> </span><span class="hl-4">&#39;male&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">arr:</span><span class="hl-1"> [</span><span class="hl-4">&#39;1&#39;</span><span class="hl-1">,</span><span class="hl-4">&#39;2&#39;</span><span class="hl-1">, </span><span class="hl-4">&#39;3&#39;</span><span class="hl-1">],</span><br/><span class="hl-1">  </span><span class="hl-0">arr2:</span><span class="hl-1"> [</span><span class="hl-6">1</span><span class="hl-1">,</span><span class="hl-6">2</span><span class="hl-1">,</span><span class="hl-6">3</span><span class="hl-1">,</span><span class="hl-6">9</span><span class="hl-1">,</span><span class="hl-6">10</span><span class="hl-1">,</span><span class="hl-6">4</span><span class="hl-1">,</span><span class="hl-6">19</span><span class="hl-1">],</span><br/><span class="hl-1">  </span><span class="hl-0">evenNum:</span><span class="hl-1"> </span><span class="hl-6">8</span><span class="hl-1">,</span><br/><span class="hl-1">};</span><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">rule</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-0">email:</span><span class="hl-7"> /</span><span class="hl-8">^</span><span class="hl-9">[</span><span class="hl-7">0-9a-zA-Z_.-</span><span class="hl-9">]</span><span class="hl-10">{2,20}</span><span class="hl-7">@</span><span class="hl-9">[</span><span class="hl-7">0-9a-zA-Z_-</span><span class="hl-9">]</span><span class="hl-10">{1,20}</span><span class="hl-9">(</span><span class="hl-11">\.</span><span class="hl-9">[</span><span class="hl-7">a-zA-Z0-9_-</span><span class="hl-9">]</span><span class="hl-10">{2,8}</span><span class="hl-9">)</span><span class="hl-10">{1,2}</span><span class="hl-8">$</span><span class="hl-7">/</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">name:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">type:</span><span class="hl-1"> </span><span class="hl-4">&#39;string&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-6">0</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-0">age:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">type:</span><span class="hl-1"> </span><span class="hl-4">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-6">0</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">message:</span><span class="hl-1"> </span><span class="hl-4">&#39;需要是一个大于0的整数&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">convert:</span><span class="hl-1"> </span><span class="hl-2">false</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-0">gender:</span><span class="hl-1"> [</span><span class="hl-4">&#39;male&#39;</span><span class="hl-1">, </span><span class="hl-4">&#39;female&#39;</span><span class="hl-1">, </span><span class="hl-4">&#39;unknown&#39;</span><span class="hl-1">],</span><br/><span class="hl-1">  </span><span class="hl-0">arr:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">type:</span><span class="hl-1"> </span><span class="hl-4">&#39;array&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-6">0</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">itemType:</span><span class="hl-1"> </span><span class="hl-4">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-0">evenNum:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">type:</span><span class="hl-1"> </span><span class="hl-4">&#39;even&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-2">let</span><span class="hl-1"> </span><span class="hl-0">errors</span><span class="hl-1"> = </span><span class="hl-0">parameter</span><span class="hl-1">.</span><span class="hl-3">validate</span><span class="hl-1">(</span><span class="hl-0">rule</span><span class="hl-1">, </span><span class="hl-0">data</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-0">strict:</span><span class="hl-1"> </span><span class="hl-2">true</span><span class="hl-1">,</span><br/><span class="hl-1">});</span><br/>
+</code></pre>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-class"><a href="classes/Parameter.html" class="tsd-kind-icon">Parameter</a></li><li class="tsd-kind-interface"><a href="interfaces/Error.html" class="tsd-kind-icon">Error</a></li><li class="tsd-kind-interface"><a href="interfaces/ParameterOptions.html" class="tsd-kind-icon">Parameter<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/Rule.html" class="tsd-kind-icon">Rule</a></li><li class="tsd-kind-type-alias"><a href="modules.html#checkFunction" class="tsd-kind-icon">check<wbr/>Function</a></li><li class="tsd-kind-variable"><a href="modules.html#DEF_CONVERT" class="tsd-kind-icon">DEF_<wbr/>CONVERT</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
