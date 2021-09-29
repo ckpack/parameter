@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/ckpack/parameter/compare/v2.0.1...v2.3.0) (2021-09-29)
+
+
+### Features
+
+* 重构代码&&添加单元测试 ([46818a4](https://github.com/ckpack/parameter/commit/46818a48d8ef93586ec17abb2a90809f84f6d076))
+* add change log ([86b62cd](https://github.com/ckpack/parameter/commit/86b62cd06f86e0ec3772a748ea1260bfd4d8ef92))
+* add changelog ([f6d9642](https://github.com/ckpack/parameter/commit/f6d96425d84f94236a4f8ab60756fa4996490a0f))
+* Refactor with typescript ([860f626](https://github.com/ckpack/parameter/commit/860f6269dacfb935c3c3f285b6400600f8b3dbb3))
+
 ## [2.2.0](https://github.com/ckpack/parameter/compare/v2.0.1...v2.2.0) (2021-09-24)
 
 

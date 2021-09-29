@@ -1,6 +1,6 @@
 {
   "name": "@ckpack/parameter",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "用于参数验证",
   "main": "cjs/index.js",
   "module": "es/index.js",
