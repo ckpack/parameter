@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/ckpack/parameter/compare/v2.4.0...v2.5.0) (2021-09-30)
+
+
+### Features
+
+* add object rule type ([caeaef0](https://github.com/ckpack/parameter/commit/caeaef008654f814b500c7b1c3aecac3fbe54016))
+
 ## [2.4.0](https://github.com/ckpack/parameter/compare/v2.3.0...v2.4.0) (2021-09-30)
 
 

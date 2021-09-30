@@ -1,6 +1,6 @@
 {
   "name": "@ckpack/parameter",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "JSON validator for Node.js and browser",
   "main": "cjs/index.js",
   "module": "es/index.js",
