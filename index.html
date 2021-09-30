@@ -2,108 +2,144 @@
 <a href="#parameter" id="parameter" style="color: inherit; text-decoration: none;">
   <h1>Parameter</h1>
 </a>
-<p>Base on <a href="https://www.npmjs.com/package/parameter">parameter</a>；</p>
-<p>Added tip parameter, which is used to prompt errors when parameter verification fails.</p>
-
-<a href="#install" id="install" style="color: inherit; text-decoration: none;">
-  <h1>Install</h1>
-</a>
-<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">i</span><span class="hl-1"> @</span><span class="hl-0">ckpack</span><span class="hl-1">/</span><span class="hl-0">parameter</span><span class="hl-1"> --</span><span class="hl-0">save</span>
-</code></pre>
+<p>JSON validator for Node.js and browser by using simple configuration rule</p>
 
 <a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-  <h1>Usage</h1>
+  <h2>Usage</h2>
+</a>
+
+<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+  <h3>API</h3>
 </a>
 <p><code>Parameter</code> Class</p>
 <ul>
-<li><code>constructor([options])</code> - new Class <code>Parameter</code> instance<ul>
-<li><code>options.convert</code> - 数据的类型进行转换,如 string:<code>&#39;5&#39;</code> =&gt; number <code>5</code>, default to <code>false</code></li>
-<li><code>strict</code> - 如果为<code>true</code> 如果数据中的key在对应rule中不存在会被删除，default to <code>false</code></li>
+<li><code>constructor([options])</code> - New Class <code>Parameter</code> instance<ul>
+<li><code>options.isUseDefault</code> - If use default value, default to <code>true</code></li>
+<li><code>options.isRemoveAdditional</code> - Delete is not defined in the rule as an attribute, default to <code>false</code></li>
+<li><code>options.isCoerceTypes</code> - Change data type of data to match type keyword, default to <code>false</code></li>
+<li><code>options.emptyValues</code> - The contained value will be treated as a empty value, default to <code>[null, undefined, NaN, &#39;&#39;]</code></li>
 </ul>
 </li>
-<li><code>validate(rule, value, opts)</code> - 校验 <code>value</code> 是否符合 <code>rule</code>. 如果不符合会返回错误数组</li>
-<li><code>addRule(type, check)</code> - 增加自定义规则<ul>
-<li><code>type</code> - 规则类型</li>
-<li><code>check(rule, value, obj)</code> - 回调函数，返回的信息表示错误</li>
+<li><code>validate(rule, value, [options])</code> - Validate the <code>value</code> conforms to <code>rule</code>. return an array of errors if break rule<ul>
+<li><code>rule</code> -  The rule of the verified json</li>
+<li><code>value</code> - JSON to be verified</li>
+<li><code>options</code> - Override the definition of <code>constructor([options])</code></li>
+</ul>
+</li>
+<li><code>addRule(type, checkFunction)</code> - Add custom rules.<ul>
+<li><code>type</code> - Rule type, required and must be string type.</li>
+<li><code>checkFunction(rule, value)</code> - Custom check rule function.</li>
 </ul>
 </li>
 </ul>
+
+<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<pre><code class="language-js"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">Parameter</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@ckpack/parameter&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">parameter</span><span class="hl-1"> = </span><span class="hl-4">new</span><span class="hl-1"> </span><span class="hl-6">Parameter</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-2">isCoerceTypes:</span><span class="hl-1"> </span><span class="hl-4">true</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-7">// custom check</span><br/><span class="hl-2">parameter</span><span class="hl-1">.</span><span class="hl-6">addRule</span><span class="hl-1">(</span><span class="hl-3">&#39;times&#39;</span><span class="hl-1">, (</span><span class="hl-2">rule</span><span class="hl-1">, </span><span class="hl-2">value</span><span class="hl-1">) </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-4">const</span><span class="hl-1"> { </span><span class="hl-5">times</span><span class="hl-1"> } = </span><span class="hl-2">rule</span><span class="hl-1">;</span><br/><span class="hl-1">  </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">value</span><span class="hl-1"> % </span><span class="hl-2">times</span><span class="hl-1"> === </span><span class="hl-8">0</span><span class="hl-1"> ? </span><span class="hl-4">null</span><span class="hl-1"> : </span><span class="hl-3">`not an integer multiple of </span><span class="hl-4">${</span><span class="hl-2">times</span><span class="hl-4">}</span><span class="hl-3">`</span><span class="hl-1">;</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-7">// json value</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">data</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-2">isAdmin:</span><span class="hl-1"> </span><span class="hl-3">&#39;true&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">age:</span><span class="hl-1"> </span><span class="hl-3">&#39;18&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">someNumber:</span><span class="hl-1"> </span><span class="hl-8">5</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">ids:</span><span class="hl-1"> [</span><span class="hl-3">&#39;1&#39;</span><span class="hl-1">, </span><span class="hl-3">&#39;2&#39;</span><span class="hl-1">, </span><span class="hl-3">&#39;3&#39;</span><span class="hl-1">]</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-7">// check rule</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">rule</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-2">isAdmin:</span><span class="hl-1"> </span><span class="hl-3">&#39;boolean&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">age:</span><span class="hl-1"> </span><span class="hl-3">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">someNumber:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-2">type:</span><span class="hl-1"> </span><span class="hl-3">&#39;times&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-2">time:</span><span class="hl-1"> </span><span class="hl-8">3</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-2">ids:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-2">type:</span><span class="hl-1"> </span><span class="hl-3">&#39;array&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-2">itemType:</span><span class="hl-1"> </span><span class="hl-3">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-2">itemRule:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-2">min:</span><span class="hl-1"> </span><span class="hl-8">1</span><br/><span class="hl-1">    }</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">errors</span><span class="hl-1"> = </span><span class="hl-2">parameter</span><span class="hl-1">.</span><span class="hl-6">validate</span><span class="hl-1">(</span><span class="hl-2">rule</span><span class="hl-1">, </span><span class="hl-2">data</span><span class="hl-1">);</span>
+</code></pre>
+<p><a href="/__test__/parameter.test.ts">complex example</a></p>
 
 <a href="#rule" id="rule" style="color: inherit; text-decoration: none;">
-  <h1>Rule</h1>
+  <h3>RULE</h3>
 </a>
 
-<a href="#common-rule" id="common-rule" style="color: inherit; text-decoration: none;">
-  <h4>common rule</h4>
+<a href="#common-rules" id="common-rules" style="color: inherit; text-decoration: none;">
+  <h4>common rules</h4>
 </a>
 <ul>
-<li><code>required</code> - if <code>required</code> is set to false, this property can be null or undefined. default to <code>true</code>.</li>
-<li><code>type</code> - The type of property, every type has it&#39;s own rule for the validate.</li>
-<li><code>convertType</code> - Make parameter convert the input param to the specific type, support <code>int</code>, <code>number</code>, <code>string</code> and <code>boolean</code>, also support a function to customize your own convert method.</li>
-<li><code>default</code> - The default value of property, once the property is allowed non-required and missed, parameter will use this as the default value. <strong>This may change the original input params</strong>.</li>
-</ul>
-
+<li>type: The rule type</li>
+<li>message: Custom error message</li>
+<li>isRequired: If check the empty value, default to <code>true</code></li>
+<li>default: Is <code>isUseDefault</code> is <code>true</code>, the empty value will be set default value, default to  <code>undefined</code>
 <a href="#int" id="int" style="color: inherit; text-decoration: none;">
   <h4>int</h4>
 </a>
-<p>If type is <code>int</code>, there has tow addition rules:</p>
-<ul>
-<li><code>max</code> - The maximum of the value, <code>value</code> must &lt;= <code>max</code>.</li>
-<li><code>min</code> - The minimum of the value, <code>value</code> must &gt;= <code>min</code>.</li>
-</ul>
-<p>Default <code>convertType</code> is <code>int</code>.</p>
+If type is <code>int</code>, There are the following options rules</li>
+<li><code>max</code> - The maximum of the value, value must &lt;= <code>max</code></li>
+<li><code>min</code> - The minimum of the value, value must &gt;= <code>min</code><pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-9">score</span><span class="hl-1">: </span><span class="hl-3">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">}</span><br/><span class="hl-7">// or</span><br/><span class="hl-1">{</span><br/><span class="hl-9">score</span><span class="hl-1">: {</span><br/><span class="hl-1">  </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-9">min</span><span class="hl-1">: </span><span class="hl-8">0</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-9">max</span><span class="hl-1">: </span><span class="hl-8">200</span><span class="hl-1">,</span><br/><span class="hl-1">}</span><br/><span class="hl-1">}</span>
+</code></pre>
 
 <a href="#number" id="number" style="color: inherit; text-decoration: none;">
   <h4>number</h4>
 </a>
-<p>If type is <code>number</code>, there has tow addition rules:</p>
-<ul>
-<li><code>max</code> - The maximum of the value, <code>value</code> must &lt;= <code>max</code>.</li>
-<li><code>min</code> - The minimum of the value, <code>value</code> must &gt;= <code>min</code>.</li>
+If type is <code>number</code>, There are the following options rules</li>
+<li><code>max</code> - The maximum of the value, value must &lt;= <code>max</code></li>
+<li><code>min</code> - The minimum of the value, value must &gt;= <code>min</code></li>
 </ul>
-<p>Default <code>convertType</code> is <code>number</code>.</p>
+<p>example</p>
+<pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">score</span><span class="hl-1">: </span><span class="hl-3">&#39;number&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">}</span><br/><span class="hl-7">// or</span><br/><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">score</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&#39;number&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-9">min</span><span class="hl-1">: </span><span class="hl-8">0</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-9">max</span><span class="hl-1">: </span><span class="hl-8">100</span><span class="hl-1">,</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code></pre>
 
 <a href="#string" id="string" style="color: inherit; text-decoration: none;">
   <h4>string</h4>
 </a>
-<p>If type is <code>string</code>, there has four addition rules:</p>
+<p>If type is <code>string</code>, There are the following options rules</p>
 <ul>
-<li><code>allowEmpty</code>(alias to <code>empty</code>) - allow empty string, default to false. If <code>rule.required</code> set to false, <code>allowEmpty</code> will be set to <code>true</code> by default.</li>
-<li><code>regexp</code> - A <code>RegExp</code> to check string&#39;s regexp.</li>
-<li><code>max</code> - The maximum length of the string.</li>
-<li><code>min</code> - The minimum length of the string.</li>
-<li><code>trim</code> - Trim the string before check, default is <code>false</code>.</li>
+<li><code>regexp</code> - A RegExp to check string&#39;s format</li>
+<li><code>max</code> - The maximum length of the string</li>
+<li><code>min</code> - The minimum length of the string</li>
 </ul>
-<p>Default <code>convertType</code> is <code>string</code></p>
+<p>example</p>
+<pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">username</span><span class="hl-1">: </span><span class="hl-3">&#39;string&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">}</span><br/><span class="hl-7">// or</span><br/><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">username</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&#39;string&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-9">regexp</span><span class="hl-1">:</span><span class="hl-10"> /\S</span><span class="hl-11">{4,20}</span><span class="hl-10">/</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code></pre>
 
 <a href="#boolean" id="boolean" style="color: inherit; text-decoration: none;">
   <h4>boolean</h4>
 </a>
-<p>Match <code>boolean</code> type value.</p>
-<p>Default <code>convertType</code> is <code>boolean</code>.</p>
-
-<a href="#enum" id="enum" style="color: inherit; text-decoration: none;">
-  <h4>enum</h4>
-</a>
-<p>If type is <code>enum</code>, it requires an addition rule:</p>
-<ul>
-<li><code>values</code> - An array of data, <code>value</code> must be one on them. <em><strong>this rule is required.</strong></em></li>
-</ul>
+<p>If type is <code>boolean</code></p>
+<p>example</p>
+<pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">isAll</span><span class="hl-1">: </span><span class="hl-3">&#39;boolean&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">}</span><br/><span class="hl-7">// or</span><br/><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">isAll</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&#39;boolean&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code></pre>
 
 <a href="#array" id="array" style="color: inherit; text-decoration: none;">
   <h4>array</h4>
 </a>
-<p>If type is <code>array</code>, there has four addition rule:</p>
+<p>If type is <code>array</code>, There are the following options rules</p>
 <ul>
-<li><code>itemType</code> - The type of every item in this array.</li>
-<li><code>rule</code> - An object that validate the items of the array. Only work with <code>itemType</code>.</li>
-<li><code>max</code> - The maximun length of the array.</li>
-<li><code>min</code> - The minimun lenght of the array.</li>
+<li><code>itemType</code> - The type of every item in this array</li>
+<li><code>itemRule</code> - The rule of every item in this Rule</li>
+<li><code>itemChecker</code>- The checker of every item, in this case you can omit <code>itemType</code> and <code>itemRule</code></li>
+<li><code>max</code> - The maximun length of the array</li>
+<li><code>min</code> - The minimum length of the array</li>
 </ul>
-
-<a href="#example" id="example" style="color: inherit; text-decoration: none;">
-  <h1>example</h1>
-</a>
-<pre><code class="language-js"><br/><span class="hl-2">let</span><span class="hl-1"> </span><span class="hl-0">parameter</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-3">Parameter</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-0">convert:</span><span class="hl-1"> </span><span class="hl-2">true</span><span class="hl-1">,</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-0">parameter</span><span class="hl-1">.</span><span class="hl-3">addRule</span><span class="hl-1">(</span><span class="hl-4">&#39;even&#39;</span><span class="hl-1">, (</span><span class="hl-0">rule</span><span class="hl-1">, </span><span class="hl-0">value</span><span class="hl-1">)</span><span class="hl-2">=&gt;</span><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-5">if</span><span class="hl-1">(</span><span class="hl-0">value</span><span class="hl-1"> % </span><span class="hl-6">2</span><span class="hl-1"> !== </span><span class="hl-6">0</span><span class="hl-1">){</span><br/><span class="hl-1">    </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-4">&#39;不是一个偶数&#39;</span><span class="hl-1">;</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">  </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-2">null</span><span class="hl-1">;</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">data</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-0">email:</span><span class="hl-1"> </span><span class="hl-4">&#39;chenkai@mapplat.com&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">name:</span><span class="hl-1"> </span><span class="hl-4">&#39;xiao hong&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">age:</span><span class="hl-1"> </span><span class="hl-6">24</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">gender:</span><span class="hl-1"> </span><span class="hl-4">&#39;male&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">arr:</span><span class="hl-1"> [</span><span class="hl-4">&#39;1&#39;</span><span class="hl-1">,</span><span class="hl-4">&#39;2&#39;</span><span class="hl-1">, </span><span class="hl-4">&#39;3&#39;</span><span class="hl-1">],</span><br/><span class="hl-1">  </span><span class="hl-0">arr2:</span><span class="hl-1"> [</span><span class="hl-6">1</span><span class="hl-1">,</span><span class="hl-6">2</span><span class="hl-1">,</span><span class="hl-6">3</span><span class="hl-1">,</span><span class="hl-6">9</span><span class="hl-1">,</span><span class="hl-6">10</span><span class="hl-1">,</span><span class="hl-6">4</span><span class="hl-1">,</span><span class="hl-6">19</span><span class="hl-1">],</span><br/><span class="hl-1">  </span><span class="hl-0">evenNum:</span><span class="hl-1"> </span><span class="hl-6">8</span><span class="hl-1">,</span><br/><span class="hl-1">};</span><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">rule</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-0">email:</span><span class="hl-7"> /</span><span class="hl-8">^</span><span class="hl-9">[</span><span class="hl-7">0-9a-zA-Z_.-</span><span class="hl-9">]</span><span class="hl-10">{2,20}</span><span class="hl-7">@</span><span class="hl-9">[</span><span class="hl-7">0-9a-zA-Z_-</span><span class="hl-9">]</span><span class="hl-10">{1,20}</span><span class="hl-9">(</span><span class="hl-11">\.</span><span class="hl-9">[</span><span class="hl-7">a-zA-Z0-9_-</span><span class="hl-9">]</span><span class="hl-10">{2,8}</span><span class="hl-9">)</span><span class="hl-10">{1,2}</span><span class="hl-8">$</span><span class="hl-7">/</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">name:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">type:</span><span class="hl-1"> </span><span class="hl-4">&#39;string&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-6">0</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-0">age:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">type:</span><span class="hl-1"> </span><span class="hl-4">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-6">0</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">message:</span><span class="hl-1"> </span><span class="hl-4">&#39;需要是一个大于0的整数&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">convert:</span><span class="hl-1"> </span><span class="hl-2">false</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-0">gender:</span><span class="hl-1"> [</span><span class="hl-4">&#39;male&#39;</span><span class="hl-1">, </span><span class="hl-4">&#39;female&#39;</span><span class="hl-1">, </span><span class="hl-4">&#39;unknown&#39;</span><span class="hl-1">],</span><br/><span class="hl-1">  </span><span class="hl-0">arr:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">type:</span><span class="hl-1"> </span><span class="hl-4">&#39;array&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">min:</span><span class="hl-1"> </span><span class="hl-6">0</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">itemType:</span><span class="hl-1"> </span><span class="hl-4">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-0">evenNum:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">type:</span><span class="hl-1"> </span><span class="hl-4">&#39;even&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-2">let</span><span class="hl-1"> </span><span class="hl-0">errors</span><span class="hl-1"> = </span><span class="hl-0">parameter</span><span class="hl-1">.</span><span class="hl-3">validate</span><span class="hl-1">(</span><span class="hl-0">rule</span><span class="hl-1">, </span><span class="hl-0">data</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-0">strict:</span><span class="hl-1"> </span><span class="hl-2">true</span><span class="hl-1">,</span><br/><span class="hl-1">});</span><br/>
+<p>example</p>
+<pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">ids</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">itemType</span><span class="hl-1">: </span><span class="hl-3">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-9">itemRule</span><span class="hl-1">: {</span><br/><span class="hl-1">      </span><span class="hl-9">min</span><span class="hl-1">: </span><span class="hl-8">1</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-9">max</span><span class="hl-1">: </span><span class="hl-8">1000</span><span class="hl-1">,</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">    </span><span class="hl-9">min</span><span class="hl-1">: </span><span class="hl-8">0</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-9">max</span><span class="hl-1">: </span><span class="hl-8">100</span><span class="hl-1">,</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
 </code></pre>
+
+<a href="#enum" id="enum" style="color: inherit; text-decoration: none;">
+  <h3>enum</h3>
+</a>
+<p>If type is <code>enum</code>, There are the following rules</p>
+<ul>
+<li><code>enum</code>- An array of data, value must be one on them</li>
+</ul>
+<p>example</p>
+<pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">sex</span><span class="hl-1">: [</span><span class="hl-3">&#39;man&#39;</span><span class="hl-1">, </span><span class="hl-3">&#39;woman&#39;</span><span class="hl-1">]</span><br/><span class="hl-1">}</span><br/><span class="hl-7">// or</span><br/><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">sex</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&#39;enum&#39;</span><br/><span class="hl-1">    </span><span class="hl-9">enum</span><span class="hl-1">: [</span><span class="hl-3">&#39;man&#39;</span><span class="hl-1">, </span><span class="hl-3">&#39;woman&#39;</span><span class="hl-1">]</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code></pre>
+
+<a href="#custom-rule" id="custom-rule" style="color: inherit; text-decoration: none;">
+  <h3>custom rule</h3>
+</a>
+<p>definition custom rule， example</p>
+<pre><code class="language-js"><span class="hl-7">// custom check</span><br/><span class="hl-2">parameter</span><span class="hl-1">.</span><span class="hl-6">addRule</span><span class="hl-1">(</span><span class="hl-3">&#39;even&#39;</span><span class="hl-1">, (</span><span class="hl-2">rule</span><span class="hl-1">, </span><span class="hl-2">value</span><span class="hl-1">) </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">value</span><span class="hl-1"> % </span><span class="hl-8">2</span><span class="hl-1"> === </span><span class="hl-8">0</span><span class="hl-1"> ? </span><span class="hl-4">null</span><span class="hl-1"> : </span><span class="hl-3">`</span><span class="hl-4">${</span><span class="hl-2">value</span><span class="hl-4">}</span><span class="hl-3"> is not even`</span><span class="hl-1">;</span><br/><span class="hl-1">});</span>
+</code></pre>
+<p>use the custom rule</p>
+<pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">someNumber</span><span class="hl-1">: </span><span class="hl-3">&#39;even&#39;</span><br/><span class="hl-1">}</span><br/><span class="hl-7">//or</span><br/><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">someNumber</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&quot;even&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code></pre>
+<p>you alse can add options rules</p>
+<pre><code class="language-js"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">Parameter</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@ckpack/parameter&#39;</span><span class="hl-1">;</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">parameter</span><span class="hl-1"> = </span><span class="hl-4">new</span><span class="hl-1"> </span><span class="hl-6">Parameter</span><span class="hl-1">();</span><br/><span class="hl-2">parameter</span><span class="hl-1">.</span><span class="hl-6">addRule</span><span class="hl-1">(</span><span class="hl-3">&#39;times&#39;</span><span class="hl-1">, (</span><span class="hl-2">rule</span><span class="hl-1">, </span><span class="hl-2">value</span><span class="hl-1">) </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-4">const</span><span class="hl-1"> { </span><span class="hl-5">times</span><span class="hl-1"> } = </span><span class="hl-2">rule</span><span class="hl-1">;</span><br/><span class="hl-1">  </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">value</span><span class="hl-1"> % </span><span class="hl-2">times</span><span class="hl-1"> === </span><span class="hl-8">0</span><span class="hl-1"> ? </span><span class="hl-4">null</span><span class="hl-1"> : </span><span class="hl-3">`not an integer multiple of </span><span class="hl-4">${</span><span class="hl-2">times</span><span class="hl-4">}</span><span class="hl-3">`</span><span class="hl-1">;</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-7">// rule</span><br/><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">someNumber</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&quot;times&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-9">times</span><span class="hl-1">: </span><span class="hl-8">3</span><span class="hl-1">,</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code></pre>
+
+<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+  <h2><a href="https://ckpack.github.io/parameter">Documentation</a></h2>
+</a>
+
+<a href="#changelog" id="changelog" style="color: inherit; text-decoration: none;">
+  <h2><a href="/CHANGELOG.md">CHANGELOG</a></h2>
+</a>
+
+<a href="#license-mit" id="license-mit" style="color: inherit; text-decoration: none;">
+  <h2>LICENSE <a href="/LICENSE">MIT</a></h2>
+</a>
 </div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-class"><a href="classes/Parameter.html" class="tsd-kind-icon">Parameter</a></li><li class="tsd-kind-interface"><a href="interfaces/Error.html" class="tsd-kind-icon">Error</a></li><li class="tsd-kind-interface"><a href="interfaces/ParameterOptions.html" class="tsd-kind-icon">Parameter<wbr/>Options</a></li><li class="tsd-kind-interface"><a href="interfaces/Rule.html" class="tsd-kind-icon">Rule</a></li><li class="tsd-kind-type-alias"><a href="modules.html#checkFunction" class="tsd-kind-icon">check<wbr/>Function</a></li><li class="tsd-kind-variable"><a href="modules.html#DEF_CONVERT" class="tsd-kind-icon">DEF_<wbr/>CONVERT</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
