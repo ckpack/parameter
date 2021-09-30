@@ -4,7 +4,6 @@ export interface Rule {
   min?: number,
   max?: number,
   regexp?: RegExp,
-  trim?:Boolean,
   enum?: any[],
   custom?: Function,
   message?: string,

@@ -11,6 +11,7 @@ export interface ParameterOptions {
   isCoerceTypes?:Boolean,
   isRemoveAdditional?:Boolean,
   isUseDefault?:Boolean,
+  emptyValues?: any[],
 };
 
 export const DEF_CONVERT: {
@@ -29,11 +30,13 @@ export class Parameter {
   isCoerceTypes: Boolean;
   isRemoveAdditional: Boolean;
   isUseDefault: Boolean;
+  emptyValues: any[];
   constructor (options: ParameterOptions = {}) {
-    const { isCoerceTypes = false, isRemoveAdditional = false, isUseDefault = true } = options;
+    const { isCoerceTypes = false, isRemoveAdditional = false, isUseDefault = true, emptyValues = [null, undefined, NaN, ''] } = options;
     this.isCoerceTypes = isCoerceTypes;
     this.isRemoveAdditional = isRemoveAdditional;
     this.isUseDefault = isUseDefault;
+    this.emptyValues = emptyValues;
   }
 
   validate (rules:{
@@ -46,7 +49,7 @@ export class Parameter {
     }
 
     // isRemoveAdditional = true 如果数据中不存在rules中会被过滤掉
-    const { isRemoveAdditional = this.isRemoveAdditional, isCoerceTypes = this.isCoerceTypes, isUseDefault = this.isUseDefault } = options;
+    const { isRemoveAdditional = this.isRemoveAdditional, isCoerceTypes = this.isCoerceTypes, isUseDefault = this.isUseDefault, emptyValues = this.emptyValues } = options;
     if (isRemoveAdditional) {
       Object.keys(params).forEach((key) => {
         if (!checkProperty(rules, key)) {
@@ -63,7 +66,7 @@ export class Parameter {
       const rule:Rule = formatRule(rules[key]);
 
       // 检查是否可选，设置默认值
-      const isEmpty = [null, undefined, ''].includes(value);
+      const isEmpty = emptyValues.includes(value);
 
       if (isEmpty) {
         if (rule.isRequired !== false) {
