@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/ckpack/parameter/compare/v2.3.0...v2.4.0) (2021-09-30)
+
+
+### Features
+
+* refactoring readme documentation ([fdcc530](https://github.com/ckpack/parameter/commit/fdcc5305bec6a61ed063b40782b0b57750917701))
+
+
+### Bug Fixes
+
+* update changelog name ([7c61100](https://github.com/ckpack/parameter/commit/7c61100ceacb7be81a5bb7791d73f081f07c809a))
+* update github aciton yml ([029c7a3](https://github.com/ckpack/parameter/commit/029c7a3d1334c1c328fbab6c2ab84fe9dc09488e))
+
 ## [2.3.0](https://github.com/ckpack/parameter/compare/v2.0.1...v2.3.0) (2021-09-29)
 
 
