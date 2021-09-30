@@ -4,30 +4,6 @@ import { Parameter } from '../src/parameter';
 describe(__filename, () => {
   test('Parameter', async () => {
     const parameter = new Parameter({});
-    console.log(parameter.validate({
-      password: {
-        type: 'string',
-        regexp: /.{6}/
-      },
-      role: {
-        type: 'enum',
-        enum: ['admin', 'user']
-      },
-      name: {
-        type: 'string',
-        min: 2,
-        max: 20
-      },
-      age: {
-        type: 'int',
-        min: 1,
-        max: 200
-      }
-    }, {
-      password: 'h',
-      name: 'x',
-      age: -10
-    }));
     expect(parameter.validate({
       password: {
         type: 'string',
@@ -235,5 +211,48 @@ describe(__filename, () => {
     }, {
       someNumber: 2
     })).toEqual(null);
+  });
+
+  test('Parameter object', async () => {
+    const parameter = new Parameter();
+    expect(parameter.validate({
+      people: {
+        type: 'object',
+        rule: {
+          name: 'string',
+          age: {
+            isRequired: false,
+            type: 'int',
+            min: 1,
+            max: 200
+          }
+        }
+      }
+    }, {
+      people: {
+        name: 'xiao hong',
+        age: 45
+      }
+    })).toEqual(null);
+
+    expect(parameter.validate({
+      people: {
+        type: 'object',
+        rule: {
+          name: 'string',
+          age: {
+            isRequired: false,
+            type: 'int',
+            min: 1,
+            max: 200
+          }
+        }
+      }
+    }, {
+      people: {
+        name: 'xiao hong',
+        age: 'xxx'
+      }
+    })).toEqual([{ code: 'invalid', field: 'people', message: [{ code: 'invalid', field: 'age', message: 'should be a integer' }] }]);
   });
 });

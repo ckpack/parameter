@@ -34,7 +34,8 @@ export const DEF_CHECKERS: {
   boolean: checkFunction,
   enum: checkFunction,
   custom: checkFunction,
-  array: checkFunction
+  array: checkFunction,
+  object: checkFunction,
   [key:string]: checkFunction,
 } = <any>{};
 
@@ -141,6 +142,13 @@ const checkArray = (rule:Rule, value: any) => {
   return errors.length ? errors : null;
 };
 
+const checkObject = function (this:any, rule:Rule, value: any) {
+  if (typeof value !== 'object') {
+    return 'should be a object';
+  }
+  return rule.rule ? this.validate(rule.rule, value) : null;
+};
+
 Object.assign(DEF_CHECKERS, {
   number: checkNumber,
   int: checkInt,
@@ -148,5 +156,6 @@ Object.assign(DEF_CHECKERS, {
   boolean: checkBoolean,
   enum: checkEnum,
   custom: checkCustom,
-  array: checkArray
+  array: checkArray,
+  object: checkObject
 });

@@ -182,6 +182,28 @@ example
   }
 }
 ```
+
+### object
+If type is `object`, There are the following rules
++ `rule`- An object that validate the properties ot the object
+
+example
+```js
+{
+  people: {
+    type: 'object',
+    rule: {
+      name: 'string',
+      age: {
+        isRequired: false,
+        type: 'int',
+        min: 1,
+        max: 200
+      }
+    }
+  }
+}
+```
 ### custom rule
 
 definition custom rule， example
