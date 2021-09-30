@@ -118,6 +118,17 @@ If type is <code>number</code>, There are the following options rules</li>
 <pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">sex</span><span class="hl-1">: [</span><span class="hl-3">&#39;man&#39;</span><span class="hl-1">, </span><span class="hl-3">&#39;woman&#39;</span><span class="hl-1">]</span><br/><span class="hl-1">}</span><br/><span class="hl-7">// or</span><br/><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">sex</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&#39;enum&#39;</span><br/><span class="hl-1">    </span><span class="hl-9">enum</span><span class="hl-1">: [</span><span class="hl-3">&#39;man&#39;</span><span class="hl-1">, </span><span class="hl-3">&#39;woman&#39;</span><span class="hl-1">]</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
 </code></pre>
 
+<a href="#object" id="object" style="color: inherit; text-decoration: none;">
+  <h3>object</h3>
+</a>
+<p>If type is <code>object</code>, There are the following rules</p>
+<ul>
+<li><code>rule</code>- An object that validate the properties ot the object</li>
+</ul>
+<p>example</p>
+<pre><code class="language-js"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-9">people</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&#39;object&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-9">rule</span><span class="hl-1">: {</span><br/><span class="hl-1">      </span><span class="hl-9">name</span><span class="hl-1">: </span><span class="hl-3">&#39;string&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-9">age</span><span class="hl-1">: {</span><br/><span class="hl-1">        </span><span class="hl-9">isRequired</span><span class="hl-1">: </span><span class="hl-4">false</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-9">type</span><span class="hl-1">: </span><span class="hl-3">&#39;int&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-9">min</span><span class="hl-1">: </span><span class="hl-8">1</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-9">max</span><span class="hl-1">: </span><span class="hl-8">200</span><br/><span class="hl-1">      }</span><br/><span class="hl-1">    }</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code></pre>
+
 <a href="#custom-rule" id="custom-rule" style="color: inherit; text-decoration: none;">
   <h3>custom rule</h3>
 </a>
