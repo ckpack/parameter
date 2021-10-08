@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/ckpack/parameter/compare/v2.5.0...v2.6.0) (2021-10-08)
+
+
+### Features
+
+* esbuild minify outfile ([e05b87d](https://github.com/ckpack/parameter/commit/e05b87d041e36764b00cc50f9df17c3c087173d6))
+* optimization rule type ([7c7f0c9](https://github.com/ckpack/parameter/commit/7c7f0c94e08e49e56c7f52a99041ab5e33ac4026))
+
 ## [2.5.0](https://github.com/ckpack/parameter/compare/v2.4.0...v2.5.0) (2021-09-30)
 
 
