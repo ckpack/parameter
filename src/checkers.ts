@@ -1,23 +1,44 @@
-import { toRawType } from './utils';
-
-export interface Rule {
+export interface RuleBase {
+  type?: string,
+  message?: string,
+  isRequired?:Boolean,
+  default?: any,
+  checker?: Function,
+  convertType?: string,
+  [key:string]: any,
+};
+export interface RuleInt extends RuleBase {
+  min?: number,
+  max?: number,
+};
+export interface RuleNumber extends RuleBase {
+  min?: number,
+  max?: number,
+};
+export interface RuleString extends RuleBase {
   min?: number,
   max?: number,
   regexp?: RegExp,
-  enum?: any[],
-  custom?: Function,
-  message?: string,
-  rule?: Rule,
-  type?: string,
-  itemType?: string,
-  itemRule?: Rule
-  itemChecker?: Function,
-  default?: any,
-  convertType?: string,
-  checker?: Function,
-  isRequired?:Boolean,
-  [key:string]: any,
 };
+export interface RuleBoolean extends RuleBase {};
+
+export interface RuleCustom extends RuleBase {
+};
+
+export interface RuleObject extends RuleBase {
+  rule?: RuleBase,
+};
+export interface RuleEnum extends RuleBase {
+  enum?: any[],
+};
+export interface RuleArray extends RuleBase {
+  min?: number,
+  max?: number,
+  itemType?: string,
+  itemRule?: RuleBase,
+  itemChecker?: Function,
+};
+export type Rules = RuleInt | RuleNumber | RuleString | RuleBoolean | RuleEnum | RuleArray | RuleObject | RuleCustom;
 
 export interface Error {
   message?: string,
@@ -25,7 +46,7 @@ export interface Error {
   code?: string,
 };
 
-export type checkFunction = (rule: Rule, value: any) => string | null | Error | Error;
+export type checkFunction = (rule: Rules, value: any) => string | null | Error | Error;
 
 export const DEF_CHECKERS: {
   number: checkFunction,
@@ -33,13 +54,12 @@ export const DEF_CHECKERS: {
   string: checkFunction,
   boolean: checkFunction,
   enum: checkFunction,
-  custom: checkFunction,
   array: checkFunction,
   object: checkFunction,
   [key:string]: checkFunction,
 } = <any>{};
 
-const checkInt = (rule:Rule, value: any) => {
+const checkInt = (rule:RuleInt, value: any) => {
   if (typeof value !== 'number' || value % 1 !== 0) {
     return 'should be a integer';
   }
@@ -54,7 +74,7 @@ const checkInt = (rule:Rule, value: any) => {
   return null;
 };
 
-const checkNumber = (rule:Rule, value: any) => {
+const checkNumber = (rule:RuleNumber, value: any) => {
   if (typeof value !== 'number' || Number.isNaN(value)) {
     return 'should be a number';
   }
@@ -68,7 +88,7 @@ const checkNumber = (rule:Rule, value: any) => {
   return null;
 };
 
-const checkString = (rule:Rule, value: any) => {
+const checkString = (rule:RuleString, value: any) => {
   if (typeof value !== 'string') {
     return 'should be a string';
   }
@@ -86,14 +106,14 @@ const checkString = (rule:Rule, value: any) => {
   return null;
 };
 
-const checkBoolean = (rule:void, value: any) => {
+const checkBoolean = (rule:RuleBoolean, value: any) => {
   if (typeof value !== 'boolean') {
     return 'should be a boolean';
   }
   return null;
 };
 
-const checkEnum = (rule:Rule, value: any) => {
+const checkEnum = (rule:RuleEnum, value: any) => {
   if (!Array.isArray(rule.enum)) {
     throw new Error('check enum need array type enum');
   }
@@ -103,15 +123,7 @@ const checkEnum = (rule:Rule, value: any) => {
   return null;
 };
 
-const checkCustom = (rule:Rule, value: any) => {
-  const { custom } = rule;
-  if (!custom || toRawType(custom) !== 'Function') {
-    throw new Error('custom need function type values');
-  }
-  return custom(rule, value);
-};
-
-const checkArray = (rule:Rule, value: any) => {
+const checkArray = (rule:RuleArray, value: any) => {
   if (!Array.isArray(value)) {
     return 'should be an array';
   }
@@ -142,7 +154,7 @@ const checkArray = (rule:Rule, value: any) => {
   return errors.length ? errors : null;
 };
 
-const checkObject = function (this:any, rule:Rule, value: any) {
+const checkObject = function (this:any, rule:RuleObject, value: any) {
   if (typeof value !== 'object') {
     return 'should be a object';
   }
@@ -155,7 +167,6 @@ Object.assign(DEF_CHECKERS, {
   string: checkString,
   boolean: checkBoolean,
   enum: checkEnum,
-  custom: checkCustom,
   array: checkArray,
   object: checkObject
 });

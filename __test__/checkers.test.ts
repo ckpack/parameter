@@ -91,24 +91,6 @@ describe(__filename, () => {
     }, false)).toEqual('should be one of 0, true, hello');
   });
 
-  test('custom', async () => {
-    const { custom: checkCustom } = DEF_CHECKERS;
-    expect(checkCustom({
-      times: 3,
-      custom: (rule:any, value:any) => {
-        const { times } = rule;
-        return value % times === 0 ? null : `not an integer multiple of ${times}`;
-      }
-    }, 0)).toEqual(null);
-    expect(checkCustom({
-      times: 3,
-      custom: (rule:any, value:any) => {
-        const { times } = rule;
-        return value % times === 0 ? null : `not an integer multiple of ${times}`;
-      }
-    }, 2)).toEqual('not an integer multiple of 3');
-  });
-
   test('array', async () => {
     const { array: checkArray } = DEF_CHECKERS;
     expect(checkArray({

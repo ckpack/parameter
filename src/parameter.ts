@@ -1,11 +1,12 @@
 import type { checkFunction } from './checkers';
 import { convertValue, checkProperty, formatRule, toRawType } from './utils';
-import { DEF_CHECKERS, Error, Rule } from './checkers';
+import { DEF_CHECKERS, Error, Rules, RuleBase, RuleInt, RuleNumber, RuleString, RuleBoolean, RuleEnum, RuleArray, RuleObject, RuleCustom } from './checkers';
 
 export type {
   checkFunction,
   Error,
-  Rule
+  Rules,
+  RuleBase, RuleInt, RuleNumber, RuleString, RuleBoolean, RuleEnum, RuleArray, RuleObject, RuleCustom
 };
 export interface ParameterOptions {
   isCoerceTypes?:Boolean,
@@ -22,8 +23,7 @@ export const DEF_CONVERT: {
   string: 'string',
   boolean: 'boolean',
   array: 'string',
-  enum: 'string',
-  custom: 'string'
+  enum: 'string'
 };
 
 export class Parameter {
@@ -40,7 +40,7 @@ export class Parameter {
   }
 
   validate (rules:{
-    [key:string]: Rule | string
+    [key:string]: Rules | string
   }, params:{
     [key:string]: any
   } = {}, options:ParameterOptions = {}) {
@@ -48,7 +48,7 @@ export class Parameter {
       throw new TypeError('rules or params need object type');
     }
 
-    // isRemoveAdditional = true 如果数据中不存在rules中会被过滤掉
+    // isRemoveAdditional = true 不存在rules中属性的值会被过滤
     const { isRemoveAdditional = this.isRemoveAdditional, isCoerceTypes = this.isCoerceTypes, isUseDefault = this.isUseDefault, emptyValues = this.emptyValues } = options;
     if (isRemoveAdditional) {
       Object.keys(params).forEach((key) => {
@@ -61,13 +61,11 @@ export class Parameter {
     const errors:Error[] = [];
 
     Object.keys(rules).forEach((key) => {
-      // 严格模式下如果数据中不存在rules中会被过滤掉
       const value = params[key];
-      const rule:Rule = formatRule(rules[key]);
+      const rule:Rules = formatRule(rules[key]);
 
-      // 检查是否可选，设置默认值
       const isEmpty = emptyValues.includes(value);
-
+      // 如果值为empty检查是否可选、设置默认值
       if (isEmpty) {
         if (rule.isRequired !== false) {
           errors.push({
