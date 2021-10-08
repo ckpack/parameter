@@ -15,7 +15,7 @@ export interface ParameterOptions {
   emptyValues?: any[],
 };
 
-export const DEF_CONVERT: {
+const DEF_CONVERT: {
   [type:string]: string
 } = {
   number: 'number',

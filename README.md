@@ -26,32 +26,21 @@ JSON validator for Node.js and browser by using simple configuration rule
 ```js
 import { Parameter } from '@ckpack/parameter';
 
-const parameter = new Parameter({
-  isCoerceTypes: true
-});
-
-// custom check
-parameter.addRule('times', (rule, value) => {
-  const { times } = rule;
-  return value % times === 0 ? null : `not an integer multiple of ${times}`;
-});
-
-// json value
-const data = {
-  isAdmin: 'true',
-  age: '18',
-  someNumber: 5,
-  ids: ['1', '2', '3']
-};
+const parameter = new Parameter();
 
 // check rule
 const rule = {
-  isAdmin: 'boolean',
-  age: 'int',
-  someNumber: {
-    type: 'times',
-    time: 3,
+  isAdmin: {
+    type: 'boolean',
   },
+  age: {
+    type: 'int',
+    min: 0,
+  },
+  role: {
+    type: 'enum',
+    enum: ['am', 'pm'],
+  }
   ids: {
     type: 'array',
     itemType: 'int',
@@ -60,6 +49,14 @@ const rule = {
     }
   }
 }
+
+// check value
+const data = {
+  isAdmin: true,
+  age: 18,
+  role: 'am',
+  ids: [1, 2, 3]
+};
 
 const errors = parameter.validate(rule, data);
 ```
@@ -246,7 +243,7 @@ parameter.addRule('times', (rule, value) => {
 }
 ```
 
-## [Documentation](https://ckpack.github.io/parameter)
+## [API Documentation](https://ckpack.github.io/parameter)
 
 ## [CHANGELOG](/CHANGELOG.md)
 
