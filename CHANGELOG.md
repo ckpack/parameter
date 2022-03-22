@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/ckpack/parameter/compare/v2.7.1...v2.8.0) (2022-03-22)
+
+
+### Features
+
+* add schema ([be68a3d](https://github.com/ckpack/parameter/commit/be68a3d19126e5c0890c898fb3eb1ee428f03b68))
+* update package.json ([6d92f63](https://github.com/ckpack/parameter/commit/6d92f630597c5b3a1c4f2fdc6133f5255f132853))
+
 ### [2.7.1](https://github.com/ckpack/parameter/compare/v2.7.0...v2.7.1) (2022-03-22)
 
 
