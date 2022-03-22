@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/ckpack/parameter/compare/v2.6.1...v2.7.0) (2022-03-22)
+
+
+### Features
+
+* 更新依赖 ([fcf9c39](https://github.com/ckpack/parameter/commit/fcf9c3998084236ae37d341f123824dbd5bb9bdb))
+
+
+### Bug Fixes
+
+* update workflow ([e7452c9](https://github.com/ckpack/parameter/commit/e7452c988f7112bf7caed3483dafaa526beaf16e))
+
 ### [2.6.1](https://github.com/ckpack/parameter/compare/v2.6.0...v2.6.1) (2021-10-08)
 
 ## [2.6.0](https://github.com/ckpack/parameter/compare/v2.5.0...v2.6.0) (2021-10-08)
