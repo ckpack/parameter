@@ -11,6 +11,7 @@
   + `options.isRemoveAdditional` - 是否删除未在规则中定义的参数, 默认值: `false`
   + `options.isCoerceTypes` - 是否开启参数类型转换, 默认值: `false`
   + `options.emptyValues` - 包含在内的值将被视为空值,此时如果开启`isUseDefault`, 参数会被设置为对应值, 默认值:`[null, undefined, NaN, '']`
++ `schema(rule, [options])` - 返回一个具有固定参数的validate
 + `validate(rule, value, [options])` - 验证 `value` 是否符合 `rule`。 如果违反规则，则返回错误数组
   + `rule` -  规则
   + `value` - 待验证的JSON参数

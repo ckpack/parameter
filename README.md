@@ -13,6 +13,7 @@ JSON validator for Node.js and browser by using simple configuration rule
   + `options.isRemoveAdditional` - Delete is not defined in the rule as an attribute, default to `false`
   + `options.isCoerceTypes` - Change data type of data to match type keyword, default to `false`
   + `options.emptyValues` - The contained value will be treated as a empty value, default to `[null, undefined, NaN, '']`
++ `schema(rule, [options])` - Returns a validate with fixed parameters
 + `validate(rule, value, [options])` - Validate the `value` conforms to `rule`. return an array of errors if break rule
   + `rule` -  The rule of the verified json
   + `value` - JSON to be verified

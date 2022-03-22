@@ -28,6 +28,9 @@ const DEF_CONVERT: {
 export const defineRule = (rule: Rules|string) => rule;
 export const defineRules = (rules: Record<string, Rules|string>) => rules;
 
+export type ValidateRules = Record<string, Rules|string>;
+export type ValidateParams = Record<string, any>;
+
 export class Parameter {
   isCoerceTypes: Boolean;
   isRemoveAdditional: Boolean;
@@ -41,13 +44,17 @@ export class Parameter {
     this.emptyValues = emptyValues;
   }
 
-  validate (rules: Record<string, Rules|string>, params:Record<string, any>, options:ParameterOptions = {}) {
+  schema (rules: ValidateRules, options?: ParameterOptions) {
+    return (params: ValidateParams) => this.validate(rules, params, options);
+  }
+
+  validate (rules: ValidateRules, params:ValidateParams, options?:ParameterOptions) {
     if (toRawType(rules) !== 'Object' || toRawType(params) !== 'Object') {
       throw new TypeError('rules or params need object type');
     }
 
     // isRemoveAdditional = true 不存在rules中属性的值会被过滤
-    const { isRemoveAdditional = this.isRemoveAdditional, isCoerceTypes = this.isCoerceTypes, isUseDefault = this.isUseDefault, emptyValues = this.emptyValues } = options;
+    const { isRemoveAdditional = this.isRemoveAdditional, isCoerceTypes = this.isCoerceTypes, isUseDefault = this.isUseDefault, emptyValues = this.emptyValues } = options || {};
     if (isRemoveAdditional) {
       Object.keys(params).forEach((key) => {
         if (!checkProperty(rules, key)) {

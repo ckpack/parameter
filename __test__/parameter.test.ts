@@ -255,4 +255,42 @@ describe(__filename, () => {
       }
     })).toEqual([{ code: 'invalid', field: 'people', message: [{ code: 'invalid', field: 'age', message: 'should be a integer' }] }]);
   });
+  test('Parameter schema', async () => {
+    const parameter = new Parameter({
+      isCoerceTypes: true
+    });
+    const userValidater = parameter.schema({
+      isAdmin: 'boolean',
+      age: 'int',
+      name: {
+        type: 'string',
+        min: 5,
+        max: 10
+      }
+    });
+
+    expect(userValidater({
+      isAdmin: 'true',
+      age: '18',
+      name: 'ckvv'
+    })).toEqual([{
+      code: 'invalid',
+      field: 'name',
+      message: 'length should bigger than 5'
+    }]);
+
+    expect(userValidater({
+      isAdmin: 'true',
+      age: 'age',
+      name: 'ckvvckvvckvvckvv'
+    })).toEqual([{
+      code: 'invalid',
+      field: 'age',
+      message: 'should be a integer'
+    }, {
+      code: 'invalid',
+      field: 'name',
+      message: 'length should smaller than 10'
+    }]);
+  });
 });
