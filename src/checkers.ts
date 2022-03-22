@@ -46,7 +46,7 @@ export interface Error {
   code?: string,
 };
 
-export type checkFunction = (rule: Rules, value: any) => string | null | Error | Error;
+export type checkFunction = (rule: Rules, value: any) => string | null | Error;
 
 export const DEF_CHECKERS: {
   number: checkFunction,
