@@ -26,6 +26,9 @@ const DEF_CONVERT: {
   enum: 'string'
 };
 
+export const defineRule = (rule: Rules|string) => rule;
+export const defineRules = (rules: Record<string, Rules|string>) => rules;
+
 export class Parameter {
   isCoerceTypes: Boolean;
   isRemoveAdditional: Boolean;
@@ -39,11 +42,7 @@ export class Parameter {
     this.emptyValues = emptyValues;
   }
 
-  validate (rules:{
-    [key:string]: Rules | string
-  }, params:{
-    [key:string]: any
-  } = {}, options:ParameterOptions = {}) {
+  validate (rules: Record<string, Rules|string>, params:Record<string, unknown> = {}, options:ParameterOptions = {}) {
     if (toRawType(rules) !== 'Object' || toRawType(params) !== 'Object') {
       throw new TypeError('rules or params need object type');
     }
@@ -111,7 +110,7 @@ export class Parameter {
     return errors.length ? errors : null;
   }
 
-  addRule (type:string, checkRule:checkFunction) {
-    DEF_CHECKERS[type] = checkRule;
+  addRule (type:string, checker:checkFunction) {
+    DEF_CHECKERS[type] = checker;
   }
 }

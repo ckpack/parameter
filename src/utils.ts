@@ -5,7 +5,7 @@ export type convertFunction = (value:any) => any;
  * @param value 参数
  * @returns 是否是函数
  */
-export const toTypeString = (value: unknown) => {
+export const toTypeString = (value: any) => {
   return Object.prototype.toString.call(value);
 };
 

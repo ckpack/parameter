@@ -9,17 +9,17 @@ JSON validator for Node.js and browser by using simple configuration rule
 `Parameter` Class
 
 + `constructor([options])` - New Class `Parameter` instance
-  - `options.isUseDefault` - If use default value, default to `true`
-  - `options.isRemoveAdditional` - Delete is not defined in the rule as an attribute, default to `false`
-  - `options.isCoerceTypes` - Change data type of data to match type keyword, default to `false`
-  - `options.emptyValues` - The contained value will be treated as a empty value, default to `[null, undefined, NaN, '']`
+  + `options.isUseDefault` - If use default value, default to `true`
+  + `options.isRemoveAdditional` - Delete is not defined in the rule as an attribute, default to `false`
+  + `options.isCoerceTypes` - Change data type of data to match type keyword, default to `false`
+  + `options.emptyValues` - The contained value will be treated as a empty value, default to `[null, undefined, NaN, '']`
 + `validate(rule, value, [options])` - Validate the `value` conforms to `rule`. return an array of errors if break rule
-  - `rule` -  The rule of the verified json
-  - `value` - JSON to be verified
-  - `options` - Override the definition of `constructor([options])`
+  + `rule` -  The rule of the verified json
+  + `value` - JSON to be verified
+  + `options` - Override the definition of `constructor([options])`
 + `addRule(type, checkFunction)` - Add custom rules.
-   - `type` - Rule type, required and must be string type.
-   - `checkFunction(rule, value)` - Custom check rule function.
+  + `type` - Rule type, required and must be string type.
+  + `checkFunction(rule, value)` - Custom check rule function.
 
 ### Example
 
@@ -66,14 +66,19 @@ const errors = parameter.validate(rule, data);
 ### RULE
 
 #### common rules
+
 + type: The rule type
 + message: Custom error message
 + isRequired: If check the empty value, default to `true`
 + default: Is `isUseDefault` is `true`, the empty value will be set default value, default to  `undefined`
+
 #### int
+
 If type is `int`, There are the following options rules
+
 + `max` - The maximum of the value, value must <= `max`
 + `min` - The minimum of the value, value must >= `min`
+
 ```js
 {
   score: 'int',
@@ -87,12 +92,16 @@ If type is `int`, There are the following options rules
   }
 }
 ```
+
 #### number
+
 If type is `number`, There are the following options rules
+
 + `max` - The maximum of the value, value must <= `max`
 + `min` - The minimum of the value, value must >= `min`
 
 example
+
 ```js
 {
   score: 'number',
@@ -106,13 +115,17 @@ example
   }
 }
 ```
+
 #### string
+
 If type is `string`, There are the following options rules
+
 + `regexp` - A RegExp to check string's format
 + `max` - The maximum length of the string
 + `min` - The minimum length of the string
 
 example
+
 ```js
 {
   username: 'string',
@@ -125,10 +138,13 @@ example
   }
 }
 ```
+
 #### boolean
+
 If type is `boolean`
 
 example
+
 ```js
 {
   isAll: 'boolean',
@@ -140,8 +156,11 @@ example
   }
 }
 ```
+
 #### array
+
 If type is `array`, There are the following options rules
+
 + `itemType` - The type of every item in this array
 + `itemRule` - The rule of every item in this Rule
 + `itemChecker`- The checker of every item, in this case you can omit `itemType` and `itemRule`
@@ -149,6 +168,7 @@ If type is `array`, There are the following options rules
 + `min` - The minimum length of the array
 
 example
+
 ```js
 {
   ids: {
@@ -162,11 +182,15 @@ example
   }
 }
 ```
+
 ### enum
+
 If type is `enum`, There are the following rules
+
 + `enum`- An array of data, value must be one on them
 
 example
+
 ```js
 {
   sex: ['man', 'woman']
@@ -181,10 +205,13 @@ example
 ```
 
 ### object
+
 If type is `object`, There are the following rules
+
 + `rule`- An object that validate the properties ot the object
 
 example
+
 ```js
 {
   people: {
@@ -201,15 +228,18 @@ example
   }
 }
 ```
+
 ### custom rule
 
 definition custom rule， example
+
 ```js
 // custom check
 parameter.addRule('even', (rule, value) => {
   return value % 2 === 0 ? null : `${value} is not even`;
 });
 ```
+
 use the custom rule
 
 ```js
@@ -242,9 +272,3 @@ parameter.addRule('times', (rule, value) => {
   }
 }
 ```
-
-## [API Documentation](https://ckpack.github.io/parameter)
-
-## [CHANGELOG](/CHANGELOG.md)
-
-## LICENSE [MIT](/LICENSE)
