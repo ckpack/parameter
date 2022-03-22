@@ -1,12 +1,11 @@
-import type { checkFunction } from './checkers';
+import type { checkFunction, Error, Rules } from './checkers';
 import { convertValue, checkProperty, formatRule, toRawType } from './utils';
-import { DEF_CHECKERS, Error, Rules, RuleBase, RuleInt, RuleNumber, RuleString, RuleBoolean, RuleEnum, RuleArray, RuleObject, RuleCustom } from './checkers';
+import { DEF_CHECKERS } from './checkers';
 
 export type {
   checkFunction,
   Error,
-  Rules,
-  RuleBase, RuleInt, RuleNumber, RuleString, RuleBoolean, RuleEnum, RuleArray, RuleObject, RuleCustom
+  Rules
 };
 export interface ParameterOptions {
   isCoerceTypes?:Boolean,
@@ -42,7 +41,7 @@ export class Parameter {
     this.emptyValues = emptyValues;
   }
 
-  validate (rules: Record<string, Rules|string>, params:Record<string, unknown> = {}, options:ParameterOptions = {}) {
+  validate (rules: Record<string, Rules|string>, params:Record<string, any>, options:ParameterOptions = {}) {
     if (toRawType(rules) !== 'Object' || toRawType(params) !== 'Object') {
       throw new TypeError('rules or params need object type');
     }
@@ -61,7 +60,7 @@ export class Parameter {
 
     Object.keys(rules).forEach((key) => {
       const value = params[key];
-      const rule:Rules = formatRule(rules[key]);
+      const rule = formatRule(rules[key]);
 
       const isEmpty = emptyValues.includes(value);
       // 如果值为empty检查是否可选、设置默认值

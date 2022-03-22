@@ -1,3 +1,5 @@
+import type { Rules } from './checkers';
+
 export type convertFunction = (value:any) => any;
 
 /**
@@ -36,7 +38,7 @@ export const convertValue = (value: any, convertType: string | convertFunction |
   }
 };
 
-export const formatRule = (rule:any) => {
+export const formatRule = (rule:any):Rules => {
   const rawType = toRawType(rule);
   switch (rawType) {
     case 'String':
