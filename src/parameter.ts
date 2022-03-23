@@ -1,4 +1,4 @@
-import type { checkFunction, Error, Rules } from './checkers';
+import type { checkFunction, Error, Rules, RulesOrigin } from './checkers';
 import { convertValue, checkProperty, formatRule, toRawType } from './utils';
 import { DEF_CHECKERS } from './checkers';
 
@@ -11,7 +11,7 @@ export interface ParameterOptions {
   isCoerceTypes?:Boolean,
   isRemoveAdditional?:Boolean,
   isUseDefault?:Boolean,
-  emptyValues?: any[],
+  emptyValues?: unknown[],
 };
 
 const DEF_CONVERT: {
@@ -25,17 +25,17 @@ const DEF_CONVERT: {
   enum: 'string'
 };
 
-export const defineRule = (rule: Rules|string) => rule;
-export const defineRules = (rules: Record<string, Rules|string>) => rules;
+export const defineRule = (rule: RulesOrigin) => rule;
+export const defineRules = (rules: Record<string, RulesOrigin>) => rules;
 
-export type ValidateRules = Record<string, Rules|string>;
+export type ValidateRules = Record<string, RulesOrigin>;
 export type ValidateParams = Record<string, any>;
 
 export class Parameter {
   isCoerceTypes: Boolean;
   isRemoveAdditional: Boolean;
   isUseDefault: Boolean;
-  emptyValues: any[];
+  emptyValues: unknown[];
   constructor (options: ParameterOptions = {}) {
     const { isCoerceTypes = false, isRemoveAdditional = false, isUseDefault = true, emptyValues = [null, undefined, NaN, ''] } = options;
     this.isCoerceTypes = isCoerceTypes;
@@ -78,6 +78,7 @@ export class Parameter {
             field: key,
             code: 'missing_field'
           });
+          return;
         }
         if (isUseDefault && checkProperty(rule, 'default')) {
           params[key] = rule.default;
@@ -103,7 +104,7 @@ export class Parameter {
       if (!checker) {
         throw new TypeError(`rule type must be one of  ${Object.keys(DEF_CHECKERS).join(', ')}, but the following type was passed: ${rule.type}`);
       }
-      const message = checker.call(this, rule, params[key], params);
+      const message = checker.call(this, rule, params[key]);
       if (message) {
         errors.push({
           message: rule.message || message,

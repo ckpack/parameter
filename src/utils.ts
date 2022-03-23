@@ -1,13 +1,11 @@
-import type { Rules } from './checkers';
-
-export type convertFunction = (value:any) => any;
+import type { Rules, RulesOrigin } from './checkers';
 
 /**
  * 返回参数类型
  * @param value 参数
  * @returns 是否是函数
  */
-export const toTypeString = (value: any) => {
+export const toTypeString = (value: unknown) => {
   return Object.prototype.toString.call(value);
 };
 
@@ -16,17 +14,17 @@ export const toTypeString = (value: any) => {
  * @param value 参数
  * @returns type
  */
-export const toRawType = (value: any) => {
+export const toRawType = (value: unknown) => {
   return toTypeString(value).slice(8, -1);
 };
 
 export const checkProperty = (params = {}, key : PropertyKey) => Object.prototype.hasOwnProperty.call(params, key);
 
-export const convertValue = (value: any, convertType: string | convertFunction | undefined) => {
+export const convertValue = (value: unknown, convertType: string | Function | undefined) => {
   if (!convertType) return value;
   switch (convertType) {
     case 'int':
-      return parseInt(value, 10);
+      return parseInt(`${value}`, 10);
     case 'string':
       return String(value);
     case 'number':
@@ -38,16 +36,16 @@ export const convertValue = (value: any, convertType: string | convertFunction |
   }
 };
 
-export const formatRule = (rule:any):Rules => {
+export const formatRule = (rule:RulesOrigin):Rules => {
   const rawType = toRawType(rule);
   switch (rawType) {
     case 'String':
-      return { type: rule };
+      return <Rules>{ type: rule };
     case 'RegExp':
       return { type: 'string', regexp: rule };
     case 'Array':
       return { type: 'enum', enum: rule };
     default:
-      return rule;
+      return <Rules>rule;
   }
 };

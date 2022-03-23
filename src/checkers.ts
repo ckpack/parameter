@@ -1,11 +1,14 @@
+import { Parameter } from './parameter';
+import type { ValidateParams } from './parameter';
 export interface RuleBase {
   type?: string,
   message?: string,
   isRequired?:Boolean,
-  default?: any,
-  checker?: Function,
+  default?: unknown,
+  // eslint-disable-next-line no-use-before-define
+  checker?: checkFunction,
   convertType?: string,
-  [key:string]: any,
+  [key:string]: RuleBase | any,
 };
 export interface RuleInt extends RuleBase {
   min?: number,
@@ -29,7 +32,7 @@ export interface RuleObject extends RuleBase {
   rule?: RuleBase,
 };
 export interface RuleEnum extends RuleBase {
-  enum?: any[],
+  enum?: unknown[],
 };
 export interface RuleArray extends RuleBase {
   min?: number,
@@ -39,6 +42,7 @@ export interface RuleArray extends RuleBase {
   itemChecker?: Function,
 };
 export type Rules = RuleInt | RuleNumber | RuleString | RuleBoolean | RuleEnum | RuleArray | RuleObject | RuleCustom;
+export type RulesOrigin = Rules | string;
 
 export interface Error {
   message?: string,
@@ -46,7 +50,7 @@ export interface Error {
   code?: string,
 };
 
-export type checkFunction = (rule: Rules, value: any) => string | null | Error;
+export type checkFunction = (rule: Rules, value: ValidateParams) => string | null;
 
 export const DEF_CHECKERS: {
   number: checkFunction,
@@ -59,7 +63,7 @@ export const DEF_CHECKERS: {
   [key:string]: checkFunction,
 } = <any>{};
 
-const checkInt = (rule:RuleInt, value: any) => {
+const checkInt = (rule:RuleInt, value: unknown) => {
   if (typeof value !== 'number' || value % 1 !== 0) {
     return 'should be a integer';
   }
@@ -74,7 +78,7 @@ const checkInt = (rule:RuleInt, value: any) => {
   return null;
 };
 
-const checkNumber = (rule:RuleNumber, value: any) => {
+const checkNumber = (rule:RuleNumber, value: unknown) => {
   if (typeof value !== 'number' || Number.isNaN(value)) {
     return 'should be a number';
   }
@@ -88,7 +92,7 @@ const checkNumber = (rule:RuleNumber, value: any) => {
   return null;
 };
 
-const checkString = (rule:RuleString, value: any) => {
+const checkString = (rule:RuleString, value: unknown) => {
   if (typeof value !== 'string') {
     return 'should be a string';
   }
@@ -106,14 +110,14 @@ const checkString = (rule:RuleString, value: any) => {
   return null;
 };
 
-const checkBoolean = (rule:RuleBoolean, value: any) => {
+const checkBoolean = (rule:RuleBoolean, value: unknown) => {
   if (typeof value !== 'boolean') {
     return 'should be a boolean';
   }
   return null;
 };
 
-const checkEnum = (rule:RuleEnum, value: any) => {
+const checkEnum = (rule:RuleEnum, value: unknown) => {
   if (!Array.isArray(rule.enum)) {
     throw new Error('check enum need array type enum');
   }
@@ -123,7 +127,7 @@ const checkEnum = (rule:RuleEnum, value: any) => {
   return null;
 };
 
-const checkArray = (rule:RuleArray, value: any) => {
+const checkArray = (rule:RuleArray, value: unknown) => {
   if (!Array.isArray(value)) {
     return 'should be an array';
   }
@@ -154,7 +158,7 @@ const checkArray = (rule:RuleArray, value: any) => {
   return errors.length ? errors : null;
 };
 
-const checkObject = function (this:any, rule:RuleObject, value: any) {
+const checkObject = function (this:Parameter, rule:RuleObject, value: ValidateParams) {
   if (typeof value !== 'object') {
     return 'should be a object';
   }
