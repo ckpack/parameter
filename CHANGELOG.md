@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/ckpack/parameter/compare/v2.8.0...v2.9.0) (2022-04-01)
+
+
+### Features
+
+* 添加多语言支持 ([5872990](https://github.com/ckpack/parameter/commit/5872990473d723ece25589cb6ead456207d51925))
+
 ## [2.8.0](https://github.com/ckpack/parameter/compare/v2.7.1...v2.8.0) (2022-03-22)
 
 
