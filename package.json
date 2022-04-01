@@ -31,23 +31,22 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@types/jest": "^27.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "@typescript-eslint/parser": "^5.16.0",
-    "eslint": "^8.11.0",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "esbuild": "^0.14.29",
+    "eslint": "^8.12.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "husky": "^7.0.2",
     "jest": "^27.2.3",
-    "ts-jest": "^27.0.5",
-    "tslib": "^2.3.1",
-    "typescript": "^4.4.3",
-    "esbuild": "^0.14.27",
     "lint-staged": "^12.3.7",
-    "standard-version": "^9.3.1"
+    "standard-version": "^9.3.1",
+    "ts-jest": "^27.1.4",
+    "tslib": "^2.3.1",
+    "typescript": "^4.6.3"
   },
-  "dependencies": {},
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint . --ext .js,.jsx,.ts,.tsx --fix"

@@ -1,7 +1,16 @@
 import { Parameter } from './parameter';
 import type { ValidateParams } from './parameter';
+import { getMessage } from './locale';
+
+export const ERROR_CODE = {
+  missingField: 'missing_field',
+  invalid: 'invalid'
+};
+
+type RuleTypes = 'int' | 'number' | 'string' | 'boolean' | 'enum' | 'array' | 'object' | string;
+
 export interface RuleBase {
-  type?: string,
+  type?: RuleTypes;
   message?: string,
   isRequired?:Boolean,
   default?: unknown,
@@ -41,8 +50,11 @@ export interface RuleArray extends RuleBase {
   itemRule?: RuleBase,
   itemChecker?: Function,
 };
+
+export type RuleFunction = ((value:any) => string | undefined);
 export type Rules = RuleInt | RuleNumber | RuleString | RuleBoolean | RuleEnum | RuleArray | RuleObject | RuleCustom;
-export type RulesOrigin = Rules | string;
+export type checkFunction = (rule: Rules, value: any) => string | undefined;
+export type RulesOrigin = Rules | RuleTypes | RegExp | RuleFunction;
 
 export interface Error {
   message?: string,
@@ -50,11 +62,9 @@ export interface Error {
   code?: string,
 };
 
-export type checkFunction = (rule: Rules, value: ValidateParams) => string | null;
-
 export const DEF_CHECKERS: {
-  number: checkFunction,
   int: checkFunction,
+  number: checkFunction,
   string: checkFunction,
   boolean: checkFunction,
   enum: checkFunction,
@@ -65,82 +75,77 @@ export const DEF_CHECKERS: {
 
 const checkInt = (rule:RuleInt, value: unknown) => {
   if (typeof value !== 'number' || value % 1 !== 0) {
-    return 'should be a integer';
+    return getMessage('int_type', { value });
   }
 
   if (rule.max && value > rule.max) {
-    return `should smaller than ${rule.max}`;
+    return getMessage('int_max', { max: rule.max, value });
   }
 
   if (rule.min && value < rule.min) {
-    return `should bigger than ${rule.min}`;
+    return getMessage('int_min', { min: rule.min, value });
   }
-  return null;
 };
 
 const checkNumber = (rule:RuleNumber, value: unknown) => {
   if (typeof value !== 'number' || Number.isNaN(value)) {
-    return 'should be a number';
+    return getMessage('number_type', { value });
   }
   if (rule.max && value > rule.max) {
-    return `should smaller than ${rule.max}`;
+    return getMessage('number_max', { max: rule.max, value });
   }
 
   if (rule.min && value < rule.min) {
-    return `should bigger than ${rule.min}`;
+    return getMessage('number_min', { min: rule.min, value });
   }
-  return null;
 };
 
 const checkString = (rule:RuleString, value: unknown) => {
   if (typeof value !== 'string') {
-    return 'should be a string';
+    return getMessage('string_type', { value });
   }
 
   if (rule.max && value.length > rule.max) {
-    return `length should smaller than ${rule.max}`;
+    return getMessage('string_max', { max: rule.max, value });
   }
   if (rule.min && value.length < rule.min) {
-    return `length should bigger than ${rule.min}`;
+    return getMessage('string_min', { min: rule.min, value });
   }
 
   if (rule.regexp && !rule.regexp.test(value)) {
-    return `should match ${rule.regexp}`;
+    return getMessage('string_regexp', { regexp: rule.regexp.toString(), value });
   }
-  return null;
 };
 
 const checkBoolean = (rule:RuleBoolean, value: unknown) => {
   if (typeof value !== 'boolean') {
-    return 'should be a boolean';
+    return getMessage('boolean_type', { value });
   }
-  return null;
 };
 
 const checkEnum = (rule:RuleEnum, value: unknown) => {
   if (!Array.isArray(rule.enum)) {
-    throw new Error('check enum need array type enum');
+    throw new Error(getMessage('enum_type', { enum: rule.enum }));
   }
   if (rule.enum.indexOf(value) === -1) {
-    return `should be one of ${rule.enum.join(', ')}`;
+    return getMessage('enum_value', { enum: rule.enum, value });
   }
-  return null;
 };
 
 const checkArray = (rule:RuleArray, value: unknown) => {
   if (!Array.isArray(value)) {
-    return 'should be an array';
+    return getMessage('array_type', { value });
   }
 
   if (rule.max && value.length > rule.max) {
-    return `length should smaller than ${rule.max}`;
+    return getMessage('array_max', { max: rule.max, value });
   }
   if (rule.min && value.length < rule.min) {
-    return `length should bigger than ${rule.min}`;
+    return getMessage('array_min', { min: rule.min, value });
   }
   const checker = rule.itemChecker || (rule.itemType && DEF_CHECKERS[rule.itemType]);
   if (!checker) {
-    throw new TypeError(`rule type: ${rule.type} must be one of ${Object.keys(DEF_CHECKERS).join(', ')}`);
+    throw new TypeError(getMessage('array_checker', { itemType: rule.itemType, itemChecker: rule.itemChecker }));
   }
   const errors: Error[] = [];
   value.forEach((v, i) => {
@@ -149,20 +154,20 @@ const checkArray = (rule:RuleArray, value: unknown) => {
     if (message) {
       errors.push({
         message: rule.message || message,
-        code: 'invalid',
+        code: ERROR_CODE.invalid,
         field: `${index}`
       });
     }
   });
 
-  return errors.length ? errors : null;
+  return errors.length ? errors : undefined;
 };
 
 const checkObject = function (this:Parameter, rule:RuleObject, value: ValidateParams) {
   if (typeof value !== 'object') {
-    return 'should be a object';
+    return getMessage('object_type', { value });
   }
-  return rule.rule ? this.validate(rule.rule, value) : null;
+  return rule.rule ? this.validate(rule.rule, value) : undefined;
 };
 
 Object.assign(DEF_CHECKERS, {

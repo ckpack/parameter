@@ -36,7 +36,7 @@ export const convertValue = (value: unknown, convertType: string | Function | un
   }
 };
 
-export const formatRule = (rule:RulesOrigin):Rules => {
+export const formatRule = (rule:RulesOrigin):Rules|((value:any) => string | undefined) => {
   const rawType = toRawType(rule);
   switch (rawType) {
     case 'String':

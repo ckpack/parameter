@@ -6,6 +6,8 @@ JSON validator for Node.js and browser by using simple configuration rule
 
 ### API
 
+### Class
+
 `Parameter` Class
 
 + `constructor([options])` - New Class `Parameter` instance
@@ -21,8 +23,6 @@ JSON validator for Node.js and browser by using simple configuration rule
 + `addRule(type, checkFunction)` - Add custom rules.
   + `type` - Rule type, required and must be string type.
   + `checkFunction(rule, value)` - Custom check rule function.
-
-### Example
 
 ```js
 import { Parameter } from '@ckpack/parameter';
@@ -62,7 +62,21 @@ const data = {
 const errors = parameter.validate(rule, data);
 ```
 
-[complex example](/__test__/parameter.test.ts)
+### Function
+
+`setLocale` 设置错误信息语言
+
+设置默认语言为中文
+
+```ts
+import { zhLocale, setLocale, Parameter } from '@ckpack/parameter';
+
+setLocale(zhLocale);
+
+const parameter = new Parameter();
+
+// parameter.validate(rule, data);
+```
 
 ### RULE
 
@@ -130,6 +144,10 @@ example
 ```js
 {
   username: 'string',
+}
+// or
+{
+  username: /\S{4,20}/,
 }
 // or
 {
@@ -273,3 +291,5 @@ parameter.addRule('times', (rule, value) => {
   }
 }
 ```
+
+[complex example](/__test__/parameter.test.ts)

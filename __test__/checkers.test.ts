@@ -6,89 +6,89 @@ describe(__filename, () => {
     const { int: checkInt } = DEF_CHECKERS;
     expect(checkInt({
       min: 8
-    }, 3)).toEqual('should bigger than 8');
+    }, 3)).toEqual('Should bigger than 8');
     expect(checkInt({
       min: 8,
       max: 20
-    }, 23)).toEqual('should smaller than 20');
+    }, 23)).toEqual('Should smaller than 20');
     expect(checkInt({
       min: 8,
       max: 20
-    }, undefined)).toEqual('should be a integer');
+    }, undefined)).toEqual('Should be a integer');
     expect(checkInt({
       min: 8,
       max: 20
-    }, 1.1)).toEqual('should be a integer');
+    }, 1.1)).toEqual('Should be a integer');
     expect(checkInt({
       min: 8,
       max: 20
-    }, 9.0)).toEqual(null);
+    }, 9.0)).toEqual(undefined);
   });
 
   test('number', async () => {
     const { number: checkNumber } = DEF_CHECKERS;
     expect(checkNumber({
       min: 8
-    }, 3)).toEqual('should bigger than 8');
+    }, 3)).toEqual('Should bigger than 8');
     expect(checkNumber({
       min: 8,
       max: 20
-    }, 23)).toEqual('should smaller than 20');
+    }, 23)).toEqual('Should smaller than 20');
 
     expect(checkNumber({
       min: 8,
       max: 20
-    }, 'test')).toEqual('should be a number');
+    }, 'test')).toEqual('Should be a number');
     expect(checkNumber({
       min: 8,
       max: 20
-    }, 10)).toEqual(null);
+    }, 10)).toEqual(undefined);
   });
 
   test('string', async () => {
     const { string: checkString } = DEF_CHECKERS;
     expect(checkString({
       min: 8
-    }, 3)).toEqual('should be a string');
+    }, 3)).toEqual('Should be a string');
     expect(checkString({
       min: 8,
       max: 20
-    }, 'he')).toEqual('length should bigger than 8');
+    }, 'he')).toEqual('Length should bigger than 8');
     expect(checkString({
       min: 8,
       max: 20
-    }, 'hello world')).toEqual(null);
+    }, 'hello world')).toEqual(undefined);
     expect(checkString({
       min: 8,
       max: 20
-    }, 'length should bigger than 8')).toEqual('length should smaller than 20');
+    }, 'Length should bigger than 8')).toEqual('Length should smaller than 20');
     expect(checkString({
       min: 8,
       max: 20,
       regexp: /\d+/
-    }, '0123456789')).toEqual(null);
+    }, '0123456789')).toEqual(undefined);
     expect(checkString({
       min: 8,
       max: 20,
       regexp: /\d+/
-    }, 'hello world')).toEqual('should match /\\d+/');
+    }, 'hello world')).toEqual('Wrong format');
   });
 
   test('boolean', async () => {
     const { boolean: checkBoolean } = DEF_CHECKERS;
-    expect(checkBoolean({}, 0)).toEqual('should be a boolean');
-    expect(checkBoolean({}, true)).toEqual(null);
-    expect(checkBoolean({}, false)).toEqual(null);
+    expect(checkBoolean({}, 0)).toEqual('Should be a boolean');
+    expect(checkBoolean({}, true)).toEqual(undefined);
+    expect(checkBoolean({}, false)).toEqual(undefined);
   });
 
   test('enum', async () => {
     const { enum: checkEnum } = DEF_CHECKERS;
     expect(checkEnum({
       enum: [0, true, 'hello']
-    }, 0)).toEqual(null);
+    }, 0)).toEqual(undefined);
     expect(checkEnum({
       enum: [0, true, 'hello']
-    }, false)).toEqual('should be one of 0, true, hello');
+    }, false)).toEqual('Value should be one of 0,true,hello');
   });
 
   test('array', async () => {
@@ -99,19 +99,19 @@ describe(__filename, () => {
         min: 8,
         max: 20
       }
-    }, ['hello', 'hello world'])).toEqual([{ code: 'invalid', field: '[0]', message: 'length should bigger than 8' }]);
+    }, ['hello', 'hello world'])).toEqual([{ code: 'invalid', field: '[0]', message: 'Length should bigger than 8' }]);
     expect(checkArray({
       itemType: 'string',
       itemRule: {
         min: 2,
         max: 20
       }
-    }, ['hello', 'hello world'])).toEqual(null);
+    }, ['hello', 'hello world'])).toEqual(undefined);
 
     expect(checkArray({
       itemChecker: (rule:any, value:any) => {
         const { times } = rule;
-        return value % times === 0 ? null : `not an integer multiple of ${times}`;
+        return value % times === 0 ? undefined : `not an integer multiple of ${times}`;
       },
       itemRule: {
         times: 3
@@ -121,11 +121,11 @@ describe(__filename, () => {
     expect(checkArray({
       itemChecker: (rule:any, value:any) => {
         const { times } = rule;
-        return value % times === 0 ? null : `not an integer multiple of ${times}`;
+        return value % times === 0 ? undefined : `not an integer multiple of ${times}`;
       },
       itemRule: {
         times: 3
       }
-    }, [3, 6, 9])).toEqual(null);
+    }, [3, 6, 9])).toEqual(undefined);
   });
 });

@@ -46,5 +46,7 @@ describe(__filename, () => {
       min: 8,
       max: 20
     });
+
+    expect(console.log).toEqual(console.log);
   });
 });

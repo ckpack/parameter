@@ -1,6 +1,8 @@
 import type { checkFunction, Error, Rules, RulesOrigin } from './checkers';
 import { convertValue, checkProperty, formatRule, toRawType } from './utils';
-import { DEF_CHECKERS } from './checkers';
+import { DEF_CHECKERS, ERROR_CODE } from './checkers';
+import { getMessage } from './locale';
+export { setLocale, getLocale, zhLocale, enLocale } from './locale';
 
 export type {
   checkFunction,
@@ -25,11 +27,11 @@ const DEF_CONVERT: {
   enum: 'string'
 };
 
-export const defineRule = (rule: RulesOrigin) => rule;
-export const defineRules = (rules: Record<string, RulesOrigin>) => rules;
-
 export type ValidateRules = Record<string, RulesOrigin>;
 export type ValidateParams = Record<string, any>;
+
+export const defineRule = (rule: RulesOrigin) => rule;
+export const defineRules = (rules: ValidateRules) => rules;
 
 export class Parameter {
   isCoerceTypes: Boolean;
@@ -50,7 +52,7 @@ export class Parameter {
 
   validate (rules: ValidateRules, params:ValidateParams, options?:ParameterOptions) {
     if (toRawType(rules) !== 'Object' || toRawType(params) !== 'Object') {
-      throw new TypeError('rules or params need object type');
+      throw new TypeError(getMessage('error_rules_and_params', { rules, params }));
     }
 
     // isRemoveAdditional = true 不存在rules中属性的值会被过滤
@@ -69,14 +71,25 @@ export class Parameter {
       const value = params[key];
       const rule = formatRule(rules[key]);
 
+      if (typeof rule === 'function') {
+        const message = rule(value);
+        message && errors.push({
+          message: message,
+          code: ERROR_CODE.invalid,
+          field: key
+        });
+        return;
+      }
+
+      const { message } = rule;
       const isEmpty = emptyValues.includes(value);
       // 如果值为empty检查是否可选、设置默认值
       if (isEmpty) {
         if (rule.isRequired !== false) {
           errors.push({
-            message: 'required',
+            message: message || getMessage('missing_required', { field: key }),
             field: key,
-            code: 'missing_field'
+            code: ERROR_CODE.missingField
           });
           return;
         }
@@ -102,19 +115,19 @@ export class Parameter {
       // 检查参数是否合法
       const checker = rule.checker || (rule.type && DEF_CHECKERS[rule.type]);
       if (!checker) {
-        throw new TypeError(`rule type must be one of  ${Object.keys(DEF_CHECKERS).join(', ')}, but the following type was passed: ${rule.type}`);
+        throw new TypeError(getMessage('error_rule_type', { types: Object.keys(DEF_CHECKERS).join(', '), type: rule.type }));
       }
-      const message = checker.call(this, rule, params[key]);
-      if (message) {
+      const checkerError = checker.call(this, rule, params[key]);
+      if (checkerError) {
         errors.push({
-          message: rule.message || message,
-          code: 'invalid',
+          message: message || checkerError,
+          code: ERROR_CODE.invalid,
           field: key
         });
       }
     });
 
-    return errors.length ? errors : null;
+    return errors.length ? errors : undefined;
   }
 
   addRule (type:string, checker:checkFunction) {

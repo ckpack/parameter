@@ -4,7 +4,9 @@
 
 ## API
 
-`Parameter` Class
+### Class
+
+`Parameter`
 
 + `constructor([options])` - `Parameter` 构造函数
   + `options.isUseDefault` - 是否使用默认值, 默认值: `true`
@@ -19,8 +21,6 @@
 + `addRule(type, checkFunction)` - 添加自定义验证规则
   + `type` - 自定义验证规则类型, 必须为字符串类型
   + `checkFunction(rule, value)` - 自定义验证规则函数该函数接受两个参数，第一个参数为规则，第二个参数为值
-
-## 例子
 
 ```js
 import { Parameter } from '@ckpack/parameter';
@@ -60,7 +60,21 @@ const data = {
 const errors = parameter.validate(rule, data);
 ```
 
-[其他用例](/__test__/parameter.test.ts)
+### Function
+
+`setLocale` 设置错误信息语言
+
+设置默认语言为中文
+
+```ts
+import { zhLocale, setLocale, Parameter } from '@ckpack/parameter';
+
+setLocale(zhLocale);
+
+const parameter = new Parameter();
+
+// parameter.validate(rule, data);
+```
 
 ## RULE
 
@@ -128,6 +142,10 @@ example
 ```js
 {
   username: 'string',
+}
+// or
+{
+  username: /\S{4,20}/,
 }
 // or
 {
@@ -273,3 +291,5 @@ parameter.addRule('times', (rule, value) => {
   }
 }
 ```
+
+[其他用例](/__test__/parameter.test.ts)
